@@ -1,13 +1,11 @@
 package net.fina.first.model.enums;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Status of FI branches.
  */
 @Getter
-@RequiredArgsConstructor
 public enum BranchStatus {
 
     ACTIVE("Active", "Branch is currently active"),
@@ -18,4 +16,9 @@ public enum BranchStatus {
 
     private final String displayName;
     private final String description;
+
+    BranchStatus(String displayName, String description) {
+        this.displayName = displayName;
+        this.description = description;
+    }
 }

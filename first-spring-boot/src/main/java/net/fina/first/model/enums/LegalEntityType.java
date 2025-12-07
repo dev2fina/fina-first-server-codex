@@ -1,13 +1,11 @@
 package net.fina.first.model.enums;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Type of legal entity for beneficiaries that are organizations.
  */
 @Getter
-@RequiredArgsConstructor
 public enum LegalEntityType {
 
     FUND("Fund", "Investment fund or similar"),
@@ -19,4 +17,9 @@ public enum LegalEntityType {
 
     private final String displayName;
     private final String description;
+
+    LegalEntityType(String displayName, String description) {
+        this.displayName = displayName;
+        this.description = description;
+    }
 }

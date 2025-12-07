@@ -1,13 +1,11 @@
 package net.fina.first.model.enums;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Types of documents in the FIRST system.
  */
 @Getter
-@RequiredArgsConstructor
 public enum DocumentType {
 
     DOCUMENT("Document", "General document"),
@@ -28,4 +26,9 @@ public enum DocumentType {
 
     private final String displayName;
     private final String description;
+
+    DocumentType(String displayName, String description) {
+        this.displayName = displayName;
+        this.description = description;
+    }
 }

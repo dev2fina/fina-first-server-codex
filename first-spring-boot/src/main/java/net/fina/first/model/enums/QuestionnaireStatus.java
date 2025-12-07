@@ -1,13 +1,11 @@
 package net.fina.first.model.enums;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Status of questionnaire items.
  */
 @Getter
-@RequiredArgsConstructor
 public enum QuestionnaireStatus {
 
     CURRENT("Current", "Currently active questionnaire"),
@@ -18,4 +16,9 @@ public enum QuestionnaireStatus {
 
     private final String displayName;
     private final String description;
+
+    QuestionnaireStatus(String displayName, String description) {
+        this.displayName = displayName;
+        this.description = description;
+    }
 }
