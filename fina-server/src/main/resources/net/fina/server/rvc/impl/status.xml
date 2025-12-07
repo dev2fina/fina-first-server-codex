@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<return-statuses>
+    <status id="1" returnId="1" returnVersionId="1" note="asd" userId="asd" statusDate="asd" status="asdf">
+        <file returnFileVersionId="1111" mdtFileVersionId="12343">blah</file>
+    </status>
+    <status id="1" returnId="1" returnVersionId="1" note="asd" userId="asd" statusDate="asd" status="asdf">
+        <file returnFileVersionId="1111" mdtFileVersionId="12343">blah</file>
+    </status>
+    <status id="1" returnId="1" returnVersionId="1" note="asd" userId="asd" statusDate="asd" status="asdf">
+        <file returnFileVersionId="1111" mdtFileVersionId="12343">blah</file>
+    </status>
+</return-statuses>

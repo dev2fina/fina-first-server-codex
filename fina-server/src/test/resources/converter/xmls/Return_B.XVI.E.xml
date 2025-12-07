@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RETURN>
+    <HEADER>
+        <BANKCODE>12345</BANKCODE>
+        <BANKNAME>Bank Name</BANKNAME>
+        <RETURNCODE>B.XVI.E</RETURNCODE>
+        <RETURNNAME>Return Name</RETURNNAME>
+        <PERIODFROM>01/03/2009</PERIODFROM>
+        <PERIODEND>31/03/2009</PERIODEND>
+        <VER>ORI</VER>
+        <SIGNED>null</SIGNED>
+        <LNG>en_US</LNG>
+    </HEADER>
+    <BODY/>
+</RETURN>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<fis>
+    <fi code="001" type="BNK" swift="TB00GE" phone="777" email="tbc@tbc.ge" identificationCode="1221212121212" region="GEO" contactPerson="gela afrasidze" registrationDate="13/05/2025" closeDate="13/05/2025" reorganization="ACQUISITION" representativePerson="Givi" numberOfMobileOffices="12" numberOfEmploys="11" webSite="www.avoe.ge" disable="false">
+        <name>
+            <description langCode="en_US">TBC Bank</description>
+            <description langCode="ka_GE">TBC Bank</description>
+        </name>
+        <shortname>
+            <description langCode="en_US">TBC</description>
+            <description langCode="ka_GE">TBC</description>
+        </shortname>
+        <address>
+            <description langCode="en_US">Tbilisi</description>
+            <description langCode="ka_GE">Tbilisi</description>
+        </address>
+        <groups>
+            <group code="BIG"/>
+        </groups>
+        <licenses>
+            <license typeCode="GL" code="GL" licDate="13/05/2025" changeDate="" default="true" status="active">
+                <reason/>
+            </license>
+        </licenses>
+        <managements>
+            <management code="CTO" phone="12345" appointmentDate="13/05/2025" cancelDate="13/05/2025" dateOfApproval="13/05/2025" resident="false" disable="false" position="Sanitar" numberOfReportingEmployees="0" mail="someone@someone.com" address="Planet Earth" portfolio="Portfoilio" dependencyStatus="false">
+                <first_name>
+                    <description langCode="en_US">Gela</description>
+                    <description langCode="ka_GE">Gela</description>
+                </first_name>
+                <last_name>
+                    <description langCode="en_US">Bestaevi</description>
+                    <description langCode="ka_GE">Bestaevi</description>
+                </last_name>
+                <post>
+                    <description langCode="en_US">Chief Tech Officer</description>
+                    <description langCode="ka_GE">Chief Tech Officer</description>
+                </post>
+                <reg_first/>
+                <reg_second/>
+                <reg_third/>
+                <comment_first/>
+                <comment_second/>
+                <person personIdNumber="12313" countryCode="GEO"/>
+            </management>
+        </managements>
+        <histories>
+            <history licenseCode="GL" status="revoked" changeDate="13/05/2025">CLOSED</history>
+        </histories>
+        <branches>
+            <branch code="CODE1" createDate="13/05/2025" changeDate="" region="GEO" disable="false" closeDate="" suspensionDate="" renewalDate="" isStorageAvailable="false" typeCode="CODE1">
+                <name>
+                    <description langCode="en_US">Main Branch</description>
+                    <description langCode="ka_GE">Main Branch</description>
+                </name>
+                <shortname>
+                    <description langCode="en_US">Main</description>
+                    <description langCode="ka_GE">Main</description>
+                </shortname>
+                <address>
+                    <description langCode="en_US">Tbilisi</description>
+                    <description langCode="ka_GE">Tbilisi</description>
+                </address>
+                <chiefAccountant personIdNumber="123ee13" countryCode="GEO" appointmentDate="13/05/2025"/>
+                <manager personIdNumber="12313" countryCode="GEO" appointmentDate="13/05/2025"/>
+                <comment/>
+            </branch>
+        </branches>
+        <metaInfo>
+            <businessEntityType code="BUS">
+                <descriptions>
+                    <description langCode="en_US">BUS</description>
+                    <description langCode="ka_GE">BUS2</description>
+                </descriptions>
+            </businessEntityType>
+            <economicEntityType code="ECO">
+                <descriptions>
+                    <description langCode="en_US">BUS</description>
+                    <description langCode="ka_GE">BUS2</description>
+                </descriptions>
+            </economicEntityType>
+            <equityFormType code="EQUI">
+                <descriptions>
+                    <description langCode="en_US">BUS</description>
+                    <description langCode="ka_GE">BUS2</description>
+                </descriptions>
+            </equityFormType>
+            <managementFormType code="MNGMG">
+                <descriptions>
+                    <description langCode="en_US">BUS</description>
+                    <description langCode="ka_GE">BUS2</description>
+                </descriptions>
+            </managementFormType>
+        </metaInfo>
+        <beneficiaries>
+            <beneficiary personIdNumber="12313" countryCode="GEO" share="10.0" nominal="0.1" creationDate="13/05/2025" active="true" currency="USD" beneficiaryType="PHYSICAL">
+                <finalBeneficiaries>
+                    <finalBeneficiaries>
+                        <physicalPerson personIdNumber="12313" countryCode="GEO"/>
+                    </finalBeneficiaries>
+                </finalBeneficiaries>
+            </beneficiary>
+            <beneficiary personIdNumber="GELA_LLC" share="17.5" nominal="0.2" creationDate="13/05/2025" active="true" currency="USD" beneficiaryType="LEGAL">
+                <finalBeneficiaries>
+                    <finalBeneficiaries>
+                        <physicalPerson personIdNumber="12313" countryCode="GEO"/>
+                    </finalBeneficiaries>
+                </finalBeneficiaries>
+            </beneficiary>
+        </beneficiaries>
+    </fi>
+</fis>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RETURN>
+    <HEADER>
+        <BANKCODE>12345</BANKCODE>
+        <BANKNAME>Bank Name</BANKNAME>
+        <RETURNCODE>B.XVI.D</RETURNCODE>
+        <RETURNNAME>Return Name</RETURNNAME>
+        <PERIODFROM>01/03/2009</PERIODFROM>
+        <PERIODEND>31/03/2009</PERIODEND>
+        <VER>ORI</VER>
+        <SIGNED>null</SIGNED>
+        <LNG>en_US</LNG>
+    </HEADER>
+    <BODY>
+        <ITEM>
+            <ITEMCODE>XVI.D.a_BS</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE>123.0</VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>XVI.D.b_BS</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE>c1</VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>XVI.D.c_BS</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE>c1 name</VALUE>
+        </ITEM>
+    </BODY>
+</RETURN>

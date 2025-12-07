@@ -1,0 +1,27 @@
+package net.fina.common.client.filter;
+
+public enum FiBranchFilter {
+    ADDRESS,
+    CHANGE_DATE,
+    CODE,
+    COMMENT,
+    CREATE_DATE,
+    EMAIL,
+    MANAGER,
+    MANAGER_APP_DATE,
+    MANAGER_ID_NUMBER,
+    NAME,
+    PHONE,
+    REGION_ID,
+    REGISTRATION_NUMBER,
+    RENEWAL_DATE,
+    SHORT_NAME,
+    SUSPENSION_DATE,
+    CLOSE_DATE,
+    DISABLED,
+    ACCOUNTANT_APP_DATE,
+    ACCOUNTANT_ID_NUMBER,
+
+    ACCOUNTANT, STORAGE_AVAILABLE
+
+}

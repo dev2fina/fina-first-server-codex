@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RETURN>
+    <HEADER>
+        <BANKCODE>12345</BANKCODE>
+        <BANKNAME>Bank Name</BANKNAME>
+        <RETURNCODE>B.X.C</RETURNCODE>
+        <RETURNNAME>Return Name</RETURNNAME>
+        <PERIODFROM>01/03/2009</PERIODFROM>
+        <PERIODEND>31/03/2009</PERIODEND>
+        <VER>ORI</VER>
+        <SIGNED>null</SIGNED>
+        <LNG>en_US</LNG>
+    </HEADER>
+    <BODY>
+        <ITEM>
+            <ITEMCODE>X.C.0</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE>ATS</VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>X.C.1</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>X.C.2</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>X.C.3</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>X.C.4</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>X.C.5</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>X.C.6</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>X.C.7</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+    </BODY>
+</RETURN>

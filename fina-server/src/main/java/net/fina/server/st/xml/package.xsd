@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="packages" type="packagesType"/>
+    <xs:complexType name="packageType">
+        <xs:sequence>
+            <xs:element type="returnsType" name="returns"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="code"/>
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="note" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="packagesType">
+        <xs:sequence>
+            <xs:element type="versionsType" name="versions"/>
+            <xs:element type="packageType" name="package" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="versionsType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="configuration"/>
+            <xs:element type="xs:string" name="mdt"/>
+            <xs:element type="xs:string" name="ost"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="returnsType">
+        <xs:sequence>
+            <xs:element type="returnType" name="return" maxOccurs="unbounded" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Zero or more repetitions:Zero or more repetitions:</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="returnType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="code"/>
+                <xs:attribute type="xs:string" name="name"/>
+                <xs:attribute type="xs:boolean" name="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: net.fina.first.ecm.template.TemplateListGeneratorTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.065 s -- in net.fina.first.ecm.template.TemplateListGeneratorTest

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration>
+    <ConfigurationVersion>2.0.0</ConfigurationVersion>
+    <server-one>
+        <PrintFilesLocation>C:\jbossas-7\repo\print</PrintFilesLocation>
+        <FinAServer>http://localhost:8080</FinAServer>
+        <UploadFilesGridPageSize>20</UploadFilesGridPageSize>
+        <ReturnsGridPageSize>50</ReturnsGridPageSize>
+        <SystemDemonPassword>a41eb7228b007734b8ddea7444f7a38716051789</SystemDemonPassword>
+        <KeyStoreRepositoryPath>C:\jbossas-7\certificates</KeyStoreRepositoryPath>
+        <KeyStoreAlias>fina2demo</KeyStoreAlias>
+        <KeyStoreInfo>C:\jbossas-7\certificates\info.properties</KeyStoreInfo>
+        <DCSMailServiceProcessTimeout>600000</DCSMailServiceProcessTimeout>
+        <DCSSubmissionToolRepositoryPath>C:\jbossas-7\SubmissionTool</DCSSubmissionToolRepositoryPath>
+        <OFFICE_HOME>C:\Program Files (x86)\OpenOffice 4</OFFICE_HOME>
+        <OFFICE_PORT>2002;2003</OFFICE_PORT>
+        <OFFICE_HOST>localhost</OFFICE_HOST>
+        <OFFICE_WORK_DIR>C:\AppServer\fina_workspace\OfficeWorkDir</OFFICE_WORK_DIR>
+        <OFFICE_TEMPLATE_DIR>C:\AppServer\fina_workspace\OfficeTemplateDir</OFFICE_TEMPLATE_DIR>
+        <!-- negative number is disabled and posotive number is enable-->
+        <ENABLE_XML_PROCESS_SERVICE>-1</ENABLE_XML_PROCESS_SERVICE>
+        <!--ECM-->
+        <ENABLE_ECM>-1</ENABLE_ECM>
+        <ECM_CONFIGURATION_DIR>C:\AppServer\fina_workspace\ECM</ECM_CONFIGURATION_DIR>
+        <!--BI Report-->
+        <BIReportsRepositoryPath>C:\AppServer\fina_workspace\BIReports</BIReportsRepositoryPath>
+        <!--Enable/Disable cluster mode-->
+        <ENABLE_CLUSTER>-1</ENABLE_CLUSTER>
+        <!--Enable report scheduler-->
+        <ENABLE_REPORT_SCHEDULER>-1</ENABLE_REPORT_SCHEDULER>
+    </server-one>
+    <server-two>
+        <PrintFilesLocation>C:\jbossas-7\repo\print</PrintFilesLocation>
+        <FinAServer>http://localhost:8080</FinAServer>
+        <UploadFilesGridPageSize>20</UploadFilesGridPageSize>
+        <ReturnsGridPageSize>50</ReturnsGridPageSize>
+        <SystemDemonPassword>a41eb7228b007734b8ddea7444f7a38716051789</SystemDemonPassword>
+        <KeyStoreRepositoryPath>C:\jbossas-7\certificates</KeyStoreRepositoryPath>
+        <KeyStoreAlias>fina2demo</KeyStoreAlias>
+        <KeyStoreInfo>C:\jbossas-7\certificates\info.properties</KeyStoreInfo>
+        <DCSMailServiceProcessTimeout>600000</DCSMailServiceProcessTimeout>
+        <DCSSubmissionToolRepositoryPath>C:\jbossas-7\SubmissionTool</DCSSubmissionToolRepositoryPath>
+        <OFFICE_HOME>C:\Program Files (x86)\OpenOffice 4</OFFICE_HOME>
+        <OFFICE_PORT>2002;2003</OFFICE_PORT>
+        <OFFICE_HOST>localhost</OFFICE_HOST>
+        <OFFICE_WORK_DIR>C:\AppServer\fina_workspace\OfficeWorkDir</OFFICE_WORK_DIR>
+        <OFFICE_TEMPLATE_DIR>C:\AppServer\fina_workspace\OfficeTemplateDir</OFFICE_TEMPLATE_DIR>
+        <!-- negative number is disabled and posotive number is enable-->
+        <ENABLE_XML_PROCESS_SERVICE>-1</ENABLE_XML_PROCESS_SERVICE>
+        <!--ECM-->
+        <ENABLE_ECM>-1</ENABLE_ECM>
+        <ECM_CONFIGURATION_DIR>C:\AppServer\fina_workspace\ECM</ECM_CONFIGURATION_DIR>
+        <!--BI Report-->
+        <BIReportsRepositoryPath>C:\AppServer\fina_workspace\BIReports</BIReportsRepositoryPath>
+        <!--Enable/Disable cluster mode-->
+        <ENABLE_CLUSTER>-1</ENABLE_CLUSTER>
+        <!--Enable report scheduler-->
+        <ENABLE_REPORT_SCHEDULER>-1</ENABLE_REPORT_SCHEDULER>
+    </server-two>
+</configuration>

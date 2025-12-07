@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RETURN>
+    <HEADER>
+        <BANKCODE>12345</BANKCODE>
+        <BANKNAME>Bank Name</BANKNAME>
+        <RETURNCODE>B.XIV</RETURNCODE>
+        <RETURNNAME>Return Name</RETURNNAME>
+        <PERIODFROM>01/03/2009</PERIODFROM>
+        <PERIODEND>31/03/2009</PERIODEND>
+        <VER>ORI</VER>
+        <SIGNED>null</SIGNED>
+        <LNG>en_US</LNG>
+    </HEADER>
+    <BODY>
+        <ITEM>
+            <ITEMCODE>XIV.CODE</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE>XIV.1</VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>XIV.Line</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE>1.0</VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>XIV.Name</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>XIV.Shares.NO</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>XIV.SharesDomestic</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>XIV.SharesForeign</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+    </BODY>
+</RETURN>

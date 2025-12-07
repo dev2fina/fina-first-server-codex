@@ -1,0 +1,8 @@
+net\fina\AppTest.class
+net\fina\first\ecm\template\TemplateListGeneratorTest.class
+net\fina\first\ecm\complexstructure\ComplexStrucutreCalculationTest.class
+net\fina\first\ecm\ReportTemplateGenerator\ReportTemplateGeneratorTest.class
+net\fina\AlfrescoAPITestCase.class
+net\fina\first\ecm\fi\imp\ImportFileReaderTest.class
+net\fina\first\ecm\export\NodeExporterTest.class
+net\fina\first\ecm\template\TemplateProcessorTest.class

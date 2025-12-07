@@ -1,0 +1,3 @@
+net\fina\common\server\util\CommonUtilTest.class
+net\fina\common\server\util\FileTypeCheckUtilTest.class
+net\fina\common\server\util\EncryptionUtilTest.class

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xsi:schemaLocation="
+        http://xmlns.jcp.org/xml/ns/persistence
+        http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="fina">
+        <jta-data-source>java:jboss/datasources/FinADS</jta-data-source>
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        <properties>
+            <property name="wildfly.jpa.default-unit" value="true"/>
+
+            <!--Dialects-->
+<!--            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>-->
+            <!--<property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect"/>-->
+
+            <!--Custom properties-->
+            <property name="hibernate.id.new_generator_mappings" value="true"/>
+            <property name="hibernate.connection.isolation" value="4096"/>
+
+            <!--Interceptor-->
+            <property name="hibernate.session_factory.interceptor" value="net.fina.auditlog.interceptors.AuditInterceptor"/>
+<!--            <property name="hibernate.current_session_context_class" value="org.hibernate.context.internal.ThreadLocalSessionContext"/>-->
+
+            <!--Optimization-->
+            <property name="hibernate.order_updates" value="true"/>
+            <property name="hibernate.order_inserts" value="true"/>
+            <property name="hibernate.jdbc.batch_versioned_data" value="true"/>
+            <property name="hibernate.jdbc.fetch_size" value="10000"/>
+            <property name="hibernate.jdbc.batch_size" value="999"/>
+            <property name="hibernate.default_batch_fetch_size" value="999"/>
+            <property name="hibernate.connection.release_mode" value="auto"/>
+            <property name="hibernate.jdbc.statement_cache_size" value="50"/>
+
+            <!--Test-->
+<!--            <property name="hibernate.show_sql" value="true"/>-->
+<!--            <property name="hibernate.format_sql" value="true"/>-->
+<!--            <property name="hibernate.use_sql_comments" value="true"/>-->
+<!--            <property name="hibernate.generate_statistics" value="true"/>-->
+<!--            <property name="hibernate.session.events.log.LOG_QUERIES_SLOWER_THAN_MS" value="200"/>-->
+
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="reg">
+        <jta-data-source>java:jboss/datasources/FinaRegDS</jta-data-source>
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+        <properties>
+
+            <!--Dialects-->
+<!--            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>-->
+            <!--<property name="hibernate.dialect" value="org.hibernate.dialect.OracleDialect"/>-->
+
+            <!--Custom properties-->
+            <property name="hibernate.id.new_generator_mappings" value="true"/>
+            <property name="hibernate.connection.isolation" value="4096"/>
+
+            <!--Optimization-->
+            <property name="hibernate.order_updates" value="true"/>
+            <property name="hibernate.order_inserts" value="true"/>
+            <property name="hibernate.jdbc.batch_versioned_data" value="true"/>
+            <property name="hibernate.jdbc.fetch_size" value="10000"/>
+            <property name="hibernate.jdbc.batch_size" value="999"/>
+            <property name="hibernate.default_batch_fetch_size" value="999"/>
+            <property name="hibernate.connection.release_mode" value="auto"/>
+            <property name="hibernate.jdbc.statement_cache_size" value="50"/>
+
+            <!--Test-->
+            <!--            <property name="hibernate.show_sql" value="true"/>-->
+            <!--            <property name="hibernate.format_sql" value="true"/>-->
+            <!--            <property name="hibernate.use_sql_comments" value="true"/>-->
+            <!--            <property name="hibernate.generate_statistics" value="true"/>-->
+
+        </properties>
+    </persistence-unit>
+</persistence>

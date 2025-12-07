@@ -1,0 +1,282 @@
+{
+  "AssetsCreditShareOfAssets": {
+    "mdtCodes": {
+      "mfo": {
+        "asset": "MFO.V01.RC.T0.C3.12",
+        "totalLoan": "MFO.V01.RC.T0.C3.3"
+      }
+    }
+  },
+  "AssetsPortfolioOverdueLoans": {
+    "mdtCodes": {
+      "mfo": {
+        "creditPortfolio": "MFO.V01.RC.T0.C3.3",
+        "loansOverdue31_60": "MFO.V01.RCLC.T1.C1.3",
+        "loansOverdue61_90": "MFO.V01.RCLC.T1.C1.4",
+        "loansOverdue91_120": "MFO.V01.RCLC.T1.C1.5",
+        "loansOverdue121_150": "MFO.V01.RCLC.T1.C1.6",
+        "loansOverdue151_180": "MFO.V01.RCLC.T1.C1.7",
+        "loansOverdue180_Plus": "MFO.V01.RCLC.T1.C1.8"
+      }
+    }
+  },
+  "AssetsPortfolioStructureByProvision": {
+    "mdtCodes": {
+      "mfo": {
+        "total": "MFO.V01.RCLC.T2.C1.14",
+        "preciousMetal": "MFO.V01.RCLC.T2.C2.14",
+        "realEstate": "MFO.V01.RCLC.T2.C3.14",
+        "transport": "MFO.V01.RCLC.T2.C4.14",
+        "thirdPersonGuarantee": "MFO.V01.RCLC.T2.C5.14",
+        "ownSecurity": "MFO.V01.RCLC.T2.C6.14",
+        "otherCompanySecurity": "MFO.V01.RCLC.T2.C7.14",
+        "governmentSecurity": "MFO.V01.RCLC.T2.C8.14",
+        "withoutCollateral": "MFO.V01.RCLC.T2.C10.14"
+      }
+    }
+  },
+  "AssetsPortfolioNpl": {
+    "mdtCodes": {
+      "mfo": {
+        "totalLoan": "MFO.V01.RC.T0.C3.3",
+        "standardLoan": "MFO.V01.RCLC.T0.C3.14",
+        "remarkableLoan": "MFO.V01.RCLC.T0.C5.14"
+      }
+    }
+  },
+  "AssetsPortfolioReserve": {
+    "mdtCodes": {
+      "mfo": {
+        "totalLoan": "MFO.V01.RC.T0.C3.3",
+        "reserve": "MFO.V01.RCLC.T0.C2.14"
+      }
+    }
+  },
+  "AssetsPortfolioStructure": {
+    "mdtCodes": {
+      "mfo": {
+        "otherPhysicalPersonLoans": "MFO.V01.RCLC.T0.C1.8",
+        "otherLegalPersonLoans": "MFO.V01.RCLC.T0.C1.13",
+        "trandeAndServices": "MFO.V01.RCLC.T0.C1.2",
+        "consumerLoans": "MFO.V01.RCLC.T0.C1.3",
+        "agriculture": "MFO.V01.RCLC.T0.C1.4",
+        "onlineLoans": "MFO.V01.RCLC.T0.C1.5",
+        "lombard": "MFO.V01.RCLC.T0.C1.6",
+        "installement": "MFO.V01.RCLC.T0.C1.7",
+        "tradeAndServiceLoans": "MFO.V01.RCLC.T0.C1.10",
+        "agriculturalAndForestryLoans": "MFO.V01.RCLC.T0.C1.11",
+        "transportAndCommunicationLoans": "MFO.V01.RCLC.T0.C1.12"
+      }
+    }
+  },
+  "BalanceSheet": {
+    "mdtCodes": {
+      "mfo": {
+        "totalAssets": "MFO.V01.RC.T0.C3.12",
+        "totalLiabilities": "MFO.V01.RC.T0.C3.19",
+        "totalCapital": "MFO.V01.RC.T0.C3.26"
+      },
+      "le": {
+        "totalAssets": "SGS.V01.A4.RC.T0.C3.10",
+        "totalLiabilities": "SGS.V01.A4.RC.T0.C3.15",
+        "totalCapital": "SGS.V01.A4.RC.T0.C3.21"
+      },
+      "cu": {
+        "totalAssets": "CU.V01.B.T0.C3.12",
+        "totalLiabilities": "CU.V01.B.T0.C3.19",
+        "totalCapital": "CU.V01.B.T0.C3.26"
+      }
+    }
+  },
+  "CapitalsSupervisoryCapital": {
+    "mdtCodes": {
+      "mfo": {
+        "authorizedCapital": "MFO.V01.RC.T0.C3.20",
+        "subordinatedLoans": "MFO.V01.RC.T0.C3.18",
+        "retainedEarnings": "MFO.V01.RC.T0.C3.24"
+      }
+    }
+  },
+  "CapitalsOwnersEquity": {
+    "mdtCodes": {
+      "mfo": {
+        "resident": "MFO.V01.ALS.T0.C3",
+        "nonResident": "MFO.V01.ALS.T1.C3"
+      }
+    }
+  },
+  "CapitalsFIAmountsByCreditCoefficientApproach": {
+    "mdtCodes": {
+      "mfo": {
+        "drawnFundsToSupervisoryCapitalRatio": "MFO.V01.A.A.C1.1"
+      }
+    }
+  },
+  "CapitalsCoefficient": {
+    "mdtCodes": {
+      "mfo": {
+        "supervisorCapital": "MFO.V01.SCAP.T0.C1.11",
+        "totalAssetsAfterDepreciation": "MFO.V01.SCAP.T0.C1.14",
+        "strictLimit": 24,
+        "lightLimit": 18
+      }
+    }
+  },
+  "LiquiditiesAssetLevel": {
+    "mdtCodes": {
+      "mfo": {
+        "cache": "MFO.V01.RC.T0.C3.1",
+        "cacheInBank": "MFO.V01.RC.T0.C3.2",
+        "securities": "MFO.V01.RC.T0.C3.6",
+        "totalAssets": "MFO.V01.RC.T0.C3.12",
+        "exchangedCache": "MFO.V01.RCC.T0.C3.5",
+        "bookedDeposit": "MFO.V01.RCC.T0.C3.6",
+        "deposit": "MFO.V01.RCC.T0.C3.7",
+        "physicalFunds": "MFO.V01.RCBF.T0.C3.1",
+        "physicalSecurities": "MFO.V01.RCOS.T0.C3.1"
+      }
+    }
+  },
+  "LiquiditiesLiabilitiesDollarization": {
+    "mdtCodes": {
+      "mfo": {
+        "totalLiabilities": "MFO.V01.RC.T0.C3.19",
+        "usdLiabilities": "MFO.V01.RC.T0.C2.19",
+        "totalLoan": "MFO.V01.RC.T0.C3.3",
+        "usdLoan": "MFO.V01.RC.T0.C2.3"
+      }
+    }
+  },
+  "LiquiditiesLiabilityStructure": {
+    "mdtCodes": {
+      "mfo": {
+        "loansFi": "MFO.V01.RC.T0.C3.13",
+        "loansSubordinated": "MFO.V01.RC.T0.C3.18",
+        "loansPhysicalPerson": "MFO.V01.RCBF.T0.C3.1",
+        "loansLegalPerson": "MFO.V01.RCBF.T0.C3.4"
+      }
+    }
+  },
+  "LiquiditiesGap": {
+    "mdtCodes": {
+      "mfo": {
+        "under1Month": "MFO.V01.AL.T0.C1.18",
+        "oneTo2Months": "MFO.V01.AL.T0.C2.18",
+        "twoTo3Months": "MFO.V01.AL.T0.C3.18",
+        "threeTo6Months": "MFO.V01.AL.T0.C4.18",
+        "sixMonthsTo1Year": "MFO.V01.AL.T0.C5.18",
+        "oneTo5Years": "MFO.V01.AL.T0.C6.18",
+        "above5Years": "MFO.V01.AL.T0.C7.18"
+      }
+    }
+  },
+  "LiquiditiesCoefficient": {
+    "mdtCodes": {
+      "mfo": {
+        "liquidAssets": "MFO.V01.ALD.T0.C2",
+        "totalBalanceLiabilities": "MFO.V01.ALD.T0.C9",
+        "strictLimit": 25,
+        "lightLimit": 18
+      }
+    }
+  },
+  "ProfitabilityMarginSpreed": {
+    "mdtCodes": {
+      "mfo": {
+        "paidPercentage": "MFO.V01.RI.T0.C3.18",
+        "totalLoan": "MFO.V01.RC.T0.C3.3",
+        "netPercentageIncome": "MFO.V01.RI.T0.C3.26",
+        "loansFi": "MFO.V01.RC.T0.C3.13",
+        "physLegPersonLoan": "MFO.V01.RC.T0.C3.14",
+        "securities": "MFO.V01.RC.T0.C3.15",
+        "loansSubordinated": "MFO.V01.RC.T0.C3.18",
+        "asset": "MFO.V01.RC.T0.C3.12"
+      }
+    }
+  },
+  "ProfitabilityCreditPortfolioAndYield": {
+    "mdtCodes": {
+      "mfo": {
+        "totalInterestIncome": "MFO.V01.RI.T0.C3.18",
+        "totalLoans": "MFO.V01.RC.T0.C3.3"
+      }
+    }
+  },
+  "ProfitabilityPercentageCost": {
+    "mdtCodes": {
+      "mfo": {
+        "percentageCost": "MFO.V01.RI.T0.C3.26",
+        "totalLiabilities": "MFO.V01.RC.T0.C3.19",
+        "otherLiabilities": "MFO.V01.RC.T0.C3.17",
+        "unpaidPercAndDiv": "MFO.V01.RC.T0.C3.16"
+      }
+    }
+  },
+  "ProfitabilityRoeRoa": {
+    "mdtCodes": {
+      "mfo": {
+        "netIncome": "MFO.V01.RI.T0.C3.55",
+        "equity": "MFO.V01.RC.T0.C3.20",
+        "assets": "MFO.V01.RC.T0.C3.12"
+      }
+    }
+  },
+  "ProfitabilityEfficiencyIndicators": {
+    "mdtCodes": {
+      "mfo": {
+        "netIncome": "MFO.V01.RI.T0.C3.46",
+        "dividend": "MFO.V01.RI.T0.C3.31",
+        "securities": "MFO.V01.RI.T0.C3.32",
+        "currencyBuySell": "MFO.V01.RI.T0.C3.34",
+        "total": "MFO.V01.RI.T0.C3.35",
+        "assets": "MFO.V01.RC.T0.C3.12",
+        "personalCost": "MFO.V01.RI.T0.C3.39",
+        "operatingIncome": "MFO.V01.RI.T0.C3.27",
+        "totalCosts": "MFO.V01.RI.T0.C3.44"
+      }
+    }
+  },
+  "ProfitabilityProfit": {
+    "mdtCodes": {
+      "mfo": {
+        "pureProfitBeforeReserving": "MFO.V01.RI.T0.C3.46",
+        "receivedDividends": "MFO.V01.RI.T0.C3.31",
+        "profitOrLossFromSecurities": "MFO.V01.RI.T0.C3.32",
+        "profitOrLossFromForeignExchangeFundsReevaluation": "MFO.V01.RI.T0.C3.34",
+        "profitOrLossFromPropertySales": "MFO.V01.RI.T0.C3.35",
+        "lossAccordingToPossibleLoanLosses": "MFO.V01.RI.T0.C3.47",
+        "pureProfit": "MFO.V01.RI.T0.C3.55"
+      }
+    }
+  },
+  "LoanPortfolio": {
+    "mdtCodes": {
+      "le": {
+        "totalLoan": "SGS.V01.A4.RC.T0.C3.3"
+      }
+    }
+  },
+  "ReceivedLoans": {
+    "mdtCodes": {
+      "le": {
+        "resident1": "SGS.V01.A4.Funds.T0.C3.2",
+        "resident2": "SGS.V01.A4.Funds.T0.C3.6",
+        "nonResident1": "SGS.V01.A4.Funds.T0.C3.3",
+        "nonResident2": "SGS.V01.A4.Funds.T0.C3.7",
+        "partners": "SGS.V01.A4.RC.T0.C3.12"
+      }
+    }
+  },
+  "ForeignCurrencyConsolidatedTurnover": {
+    "mdtCodes": {
+      "fex": {
+        "purchaseColumn": "VGP.V01.S1.T1.C3",
+        "purchaseUsd": "VGP.V01.S1.T1.C3.2",
+        "purchaseEur": "VGP.V01.S1.T1.C3.3",
+        "saleColumn": "VGP.V01.S1.T1.C4",
+        "saleUsd": "VGP.V01.S1.T1.C4.2",
+        "saleEur": "VGP.V01.S1.T1.C4.3"
+      }
+    }
+  }
+}

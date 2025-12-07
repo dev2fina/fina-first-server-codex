@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RETURN>
+    <HEADER>
+        <BANKCODE>12345</BANKCODE>
+        <BANKNAME>Bank Name</BANKNAME>
+        <RETURNCODE>B.VII.B</RETURNCODE>
+        <RETURNNAME>Return Name</RETURNNAME>
+        <PERIODFROM>01/03/2009</PERIODFROM>
+        <PERIODEND>31/03/2009</PERIODEND>
+        <VER>ORI</VER>
+        <SIGNED>null</SIGNED>
+        <LNG>en_US</LNG>
+    </HEADER>
+    <BODY>
+        <ITEM>
+            <ITEMCODE>VII.B.CODE</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE>VII.B.3</VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>VII.B.Line</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE>3.0</VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>VII.B.Client</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>VII.B.TaxID</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>VII.B.SectorCode</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>VII.B.SightDeposits</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>VII.B.TimeDeposits</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>VII.B.Savings</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>VII.B.OtherDeposits</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+        <ITEM>
+            <ITEMCODE>VII.B.BAndS</ITEMCODE>
+            <ROW>0</ROW>
+            <VALUE></VALUE>
+        </ITEM>
+    </BODY>
+</RETURN>

@@ -1,0 +1,29 @@
+A workaround for this issue to set the transaction isolation level to 'snapshot' for each connection.
+
+
+
+    <datasources>
+        <local-tx-datasource>
+            <jndi-name>BPELDB</jndi-name>
+            ...
+            <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+            <new-connection-sql>SET TRANSACTION ISOLATION LEVEL SNAPSHOT;</new-connection-sql>
+            ...
+        </local-tx-datasource>
+    </datasources>
+
+
+
+You will have to allow 'snapshot' isolation with this command:
+
+
+
+    ALTER DATABASE BPELDB SET ALLOW_SNAPSHOT_ISOLATION ON;
+
+
+
+We are addressing this in the Riftsaw 2.3.6 branch.
+
+
+
+https://bugzilla.redhat.com/show_bug.cgi?id=815379

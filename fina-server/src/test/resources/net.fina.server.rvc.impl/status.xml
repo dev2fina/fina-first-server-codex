@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<return-statuses>
+    <status status="net.fina.returns.status.created" statusDate="1505470163595" userId="37" note="Create Return." returnVersionId="3" returnId="54497" id="87285">
+        <file returnTemplateVersionId="67f5575317f1e77d35a2bd-e5e4-4c4a-983c-49b063461ac3" mdtFileVersionId="67f5575317f1e737cd68a2-f856-4102-8207-5049723c0183" returnFileVersionId="67f5575317f1e7078fe5cc-887d-4e69-bcfa-82b774e76888"></file>
+    </status>
+    <status status="net.fina.returns.status.amended" statusDate="1505470217499" userId="37" note="Amended..." returnVersionId="3" returnId="54497" id="87286">
+        <file returnTemplateVersionId="67f5575317f1e77d35a2bd-e5e4-4c4a-983c-49b063461ac3" mdtFileVersionId="67f5575317f1e7cdfee4f9-4c3f-4ea2-8a53-da5848c5042d" returnFileVersionId="67f5575317f1e7f6345c02-0e78-4531-bcd5-81aa378eed6e"></file>
+    </status>
+    <status status="net.fina.returns.status.processed" statusDate="1505470218054" userId="37" note="Process OK" returnVersionId="3" returnId="54497" id="87287">
+        <file returnTemplateVersionId="67f5575317f1e77d35a2bd-e5e4-4c4a-983c-49b063461ac3" mdtFileVersionId="67f5575317f1e7b1e1731f-802b-4f4a-ab02-ef6b70a900fd" returnFileVersionId="67f5575317f1e7a6a95625-6e4f-44ef-b26c-07b8fc9301de"></file>
+    </status>
+    <status status="net.fina.returns.status.amended" statusDate="1505721107194" userId="37" note="Amended..." returnVersionId="3" returnId="54497" id="87289">
+        <file returnTemplateVersionId="67f5575317f1e77d35a2bd-e5e4-4c4a-983c-49b063461ac3" mdtFileVersionId="67f5575317f1e7659bc6e0-b1c5-46ed-8523-286b74200323" returnFileVersionId="67f5575317f1e7a0cddeb7-4fce-49d5-9508-38060ba11084"></file>
+    </status>
+    <status status="net.fina.returns.status.processed" statusDate="1505721110357" userId="37" note="Process OK" returnVersionId="3" returnId="54497" id="87290">
+        <file returnTemplateVersionId="67f5575317f1e77d35a2bd-e5e4-4c4a-983c-49b063461ac3" mdtFileVersionId="67f5575317f1e7201f2fc3-9fb3-488a-bfff-e98b189639b2" returnFileVersionId="67f5575317f1e7c21a3611-86ba-46bb-82f7-a437f7010772"></file>
+    </status>
+    <status status="net.fina.returns.status.amended" statusDate="1505721762611" userId="37" note="Amended..." returnVersionId="3" returnId="54497" id="87291">
+        <file returnTemplateVersionId="67f5575317f1e77d35a2bd-e5e4-4c4a-983c-49b063461ac3" mdtFileVersionId="67f5575317f1e73be0fa82-f8b0-4783-a2a1-45183392baab" returnFileVersionId="67f5575317f1e74143a5c9-b305-463c-ad0b-940b8abd9ca0"></file>
+    </status>
+    <status status="net.fina.returns.status.processed" statusDate="1505721765946" userId="37" note="Process OK" returnVersionId="3" returnId="54497" id="87292">
+        <file returnTemplateVersionId="67f5575317f1e77d35a2bd-e5e4-4c4a-983c-49b063461ac3" mdtFileVersionId="67f5575317f1e74691fb60-b259-4d9d-b9aa-88f89df44680" returnFileVersionId="67f5575317f1e75f278d51-790e-46bf-a4c7-3f110797dee9"></file>
+    </status>
+    <status status="net.fina.returns.status.amended" statusDate="1505723164931" userId="37" note="Amended..." returnVersionId="3" returnId="54497" id="87293">
+        <file returnTemplateVersionId="67f5575317f1e77d35a2bd-e5e4-4c4a-983c-49b063461ac3" mdtFileVersionId="67f5575317f1e7e1cd3541-671e-4b18-830f-daeb23b5f9ab" returnFileVersionId="67f5575317f1e71cc767f8-0785-415c-8215-ddfef2027f1e"></file>
+    </status>
+    <status status="net.fina.returns.status.processed" statusDate="1505723168018" userId="37" note="Process OK" returnVersionId="3" returnId="54497" id="87294">
+        <file returnTemplateVersionId="67f5575317f1e77d35a2bd-e5e4-4c4a-983c-49b063461ac3" mdtFileVersionId="67f5575317f1e7f0a0b96f-44e5-4dd7-80af-25ebff93d3b9" returnFileVersionId="67f5575317f1e7345664ca-ebd8-4778-8f86-b38172a91ee5"></file>
+    </status>
+    <status status="net.fina.returns.status.amended" statusDate="1506338485304" userId="37" note="Amended..." returnVersionId="3" returnId="54497" id="87295">
+        <file returnTemplateVersionId="67f5575317f1e77d35a2bd-e5e4-4c4a-983c-49b063461ac3" mdtFileVersionId="67f5575317f1e7c1c9a3be-3468-4462-9650-85f3e2813d5e" returnFileVersionId="67f5575317f1e74f84d664-f497-4994-92cf-580b2a448cc5"></file>
+    </status>
+    <status status="net.fina.returns.status.processed" statusDate="1506338489144" userId="37" note="Process OK" returnVersionId="3" returnId="54497" id="87296">
+        <file returnTemplateVersionId="67f5575317f1e77d35a2bd-e5e4-4c4a-983c-49b063461ac3" mdtFileVersionId="67f5575317f1e7ef7892b2-b893-48bb-b446-bf47534eee31" returnFileVersionId="67f5575317f1e76c990036-a615-4838-a84e-6916198656d3"/>
+    </status>
+</return-statuses>

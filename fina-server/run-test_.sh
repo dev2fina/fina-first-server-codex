@@ -1,0 +1,1 @@
+mvn surefire:test -Dtest=net.fina.server.store.impl.JackrabbitRepositorySessionTest

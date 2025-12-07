@@ -1,0 +1,14 @@
+package net.fina.server.dcs.password.util;
+
+public enum ResetPasswordStatus {
+    SUCCESS,
+    ERROR,
+    ERROR_USER_LOGIN_NOT_PROVIDED,
+    ERROR_USER_EMAIL_NOT_PROVIDED,
+    ERROR_USER_PHONE_NOT_PROVIDED,
+    ERROR_USER_EMAIL_AND_PHONE_NOT_PROVIDED,
+    USER_NOT_FOUND,
+    USER_BLOCKED,
+    PASSWORD_ALREADY_RESET,
+    USER_DISABLED
+}

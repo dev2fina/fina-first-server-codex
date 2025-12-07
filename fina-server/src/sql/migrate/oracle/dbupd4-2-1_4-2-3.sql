@@ -1,0 +1,69 @@
+/*
+ Database: Oracle 11g
+ 
+ Author: Nick Gochiashvili
+ E: nick@fina2.net
+ Version: 0.1
+ Date : 15/11/2012
+*/
+
+/*
+  Update DB Version
+*/
+update sys_properties set value='4.2.3' where prop_key='fina2.database.schemaVersion';
+
+/*
+	Add OUT_REPORTS code and optlock columns
+*/
+ALTER TABLE OUT_REPORTS ADD code varchar2(12) NULL;
+ALTER TABLE OUT_REPORTS ADD optlock INT DEFAULT 0 NOT NULL;
+
+/*
+  Add IN_MANAGING_BODIES code column
+ */
+ALTER TABLE IN_MANAGING_BODIES ADD code varchar2 (12) NULL;
+
+/**
+Add Properties
+ */
+
+DELETE FROM SYS_PROPERTIES WHERE RTRIM(PROP_KEY) IN('fina2.process.unchangedReturn.statuses','fina2.auditlog.enable');
+INSERT INTO SYS_PROPERTIES(PROP_KEY,VALUE) VALUES('fina2.process.unchangedReturn.statuses','');
+INSERT INTO SYS_PROPERTIES(PROP_KEY,VALUE) VALUES('fina2.auditlog.enable','1');
+
+CREATE TABLE IN_IMPORTED_XML_RETURN 
+(
+  IMPORTEDRETURNID NUMBER(10, 0) 
+, RETURNID NUMBER(10, 0) 
+, importTime DATE
+, STATUS NUMBER(10, 0) 
+);
+
+commit;
+
+DECLARE
+  AUDITID      SYS_PERMISSIONS.ID%TYPE;
+  AUDITSTRID   SYS_STRINGS.ID%TYPE;
+  LANGID      SYS_LANGUAGES.ID%TYPE;
+  AUDITCODE    SYS_PERMISSIONS.IDNAME%TYPE := 'net.fina.auditTrailLog';
+  AUDITSTRING  SYS_STRINGS.VALUE%TYPE := 'Audit trail log';
+BEGIN
+  SELECT ID INTO LANGID FROM SYS_LANGUAGES WHERE RTRIM(CODE) = 'en_US';
+  SELECT MAX(ID) + 1 INTO AUDITID FROM SYS_PERMISSIONS;
+  SELECT MAX(ID) + 1 INTO AUDITSTRID FROM SYS_STRINGS;
+  DELETE FROM SYS_PERMISSIONS
+   WHERE RTRIM(IDNAME) IN  (RTRIM(AUDITCODE));
+
+  INSERT INTO SYS_PERMISSIONS
+    (ID, IDNAME, NAMESTRID)
+  VALUES
+    (AUDITID, AUDITCODE, AUDITSTRID);
+  INSERT INTO SYS_STRINGS
+    (ID, LANGID, VALUE)
+  VALUES
+    (AUDITSTRID, LANGID, AUDITSTRING);
+
+commit;
+
+END;
+/

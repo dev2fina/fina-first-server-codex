@@ -1,0 +1,3 @@
+--fix last version problem
+--select b.code,rd.code,p.FROMDATE,p.TODATE,r.VERSION,r.VERSIONID from IN_RETURNS r ,IN_SCHEDULES s,IN_PERIODS p,IN_BANKS b,IN_RETURN_DEFINITIONS rd where r.SCHEDULEID=s.ID and s.PERIODID=p.id and s.BANKID=b.id and s.definitionId=rd.id and r.id in(select r.ID from IN_RETURNS r where r.VERSION!=r.VERSIONID and r.VERSION not in (select VERSIONID from IN_RETURNS where SCHEDULEID=r.SCHEDULEID and r.ID!=id));
+update IN_RETURNS set VERSION=VERSIONID where id in(select r.ID from IN_RETURNS r where r.VERSION!=r.VERSIONID and r.VERSION not in (select VERSIONID from IN_RETURNS where SCHEDULEID=r.SCHEDULEID and r.ID!=id));

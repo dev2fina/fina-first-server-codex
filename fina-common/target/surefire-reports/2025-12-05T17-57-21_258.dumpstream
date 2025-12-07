@@ -1,0 +1,5 @@
+# Created at 2025-12-05T17:57:33.910
+Boot Manifest-JAR contains absolute paths in classpath 'D:\Dev\fina-core\fina-core\fina\fina-common\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

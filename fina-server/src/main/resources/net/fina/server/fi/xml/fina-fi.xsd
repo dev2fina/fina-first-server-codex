@@ -1,0 +1,335 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:complexType name="descriptions">
+    <xs:sequence>
+      <xs:element name="description" maxOccurs="unbounded" minOccurs="0">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute type="xs:string" name="langCode" use="required"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="licenseStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="active" />
+      <xs:enumeration value="suspended" />
+      <xs:enumeration value="revoked" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="reorganizationType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="MERGER" />
+      <xs:enumeration value="ACQUISITION" />
+      <xs:enumeration value="DIVISION" />
+      <xs:enumeration value="SPINOFF" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="currencyType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="USD"/>
+      <xs:enumeration value="GEL"/>
+      <xs:enumeration value="COM"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="beneficiaryType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LEGAL"/>
+      <xs:enumeration value="PHYSICAL"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="percentageType">
+    <xs:restriction base="xs:double">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="managerType">
+        <xs:attribute type="xs:string" name="personIdNumber" use="required"/>
+        <xs:attribute type="xs:string" name="countryCode" use="required"/>
+        <xs:attribute type="xs:string" name="appointmentDate" use="required"/>
+        <xs:attribute type="xs:string" name="fullName"/>
+  </xs:complexType>
+
+  <xs:simpleType name="activeStatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ACTIVE" />
+      <xs:enumeration value="INACTIVE" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="legalStatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SOLE_PROPRIETOR_NO_RESIDENT" />
+      <xs:enumeration value="SOLE_PROPRIETOR_RESIDENT" />
+      <xs:enumeration value="PHYSICAL_PERSONS_NO_RESIDENT" />
+      <xs:enumeration value="PHYSICAL_PERSONS_RESIDENT" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="personType">
+    <xs:sequence>
+      <xs:element name="name" type="descriptions"/>
+      <xs:element name="positions"  minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="position" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="positionDescriptions" type="descriptions"/>
+                </xs:sequence>
+                <xs:attribute type="xs:string" name="lpIdNumber" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="personIdNumber" use="required"/>
+    <xs:attribute type="xs:string" name="countryCode" use="required"/>
+    <xs:attribute type="activeStatusType" name="status" use="required"/>
+    <xs:attribute type="xs:string" name="passportNumber" use="required"/>
+    <xs:attribute type="legalStatusType" name="legalStatus"/>
+  </xs:complexType>
+  <xs:complexType name="managementCommitteeType">
+      <xs:sequence>
+        <xs:element name="committees" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="name" type="descriptions"/>
+              <xs:element name="position" type="descriptions"/>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="electionDate" use="required"/>
+            <xs:attribute type="xs:string" name="approvalDate"/>
+            <xs:attribute type="xs:string" name="comment"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="finalBeneficiariesType">
+    <xs:sequence>
+      <xs:element name="finalBeneficiaries" maxOccurs="unbounded" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="physicalPerson" type="personType" minOccurs="1" maxOccurs="1"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="fis">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="fi" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="name" type="descriptions"/>
+              <xs:element name="shortname" type="descriptions"/>
+              <xs:element name="address" type="descriptions"/>
+              <xs:element name="groups" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="group" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="code" use="required"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="licenses">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="license" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="reason" type="descriptions"/>
+                        </xs:sequence>
+                        <xs:attribute type="xs:string" name="typeCode"/>
+                        <xs:attribute type="xs:string" name="code"/>
+                        <xs:attribute type="xs:string" name="licDate"/>
+                        <xs:attribute type="xs:string" name="changeDate"/>
+                        <xs:attribute type="xs:boolean" name="default"/>
+                        <xs:attribute name="status" type="licenseStatus"/>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="managements">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="management" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="first_name" type="descriptions"/>
+                          <xs:element name="last_name" type="descriptions"/>
+                          <xs:element name="post" type="descriptions"/>
+                          <xs:element name="reg_first" type="descriptions"/>
+                          <xs:element name="reg_second" type="descriptions"/>
+                          <xs:element name="reg_third" type="descriptions"/>
+                          <xs:element name="comment_first" type="descriptions"/>
+                          <xs:element name="comment_second" type="descriptions"/>
+                          <xs:element name="person" type="personType" minOccurs="0"/>
+                          <xs:element name="managementCommittees" type="managementCommitteeType" minOccurs="0"/>
+                        </xs:sequence>
+                        <xs:attribute type="xs:string" name="code"/>
+                        <xs:attribute type="xs:string" name="phone"/>
+                        <xs:attribute type="xs:string" name="appointmentDate"/>
+                        <xs:attribute type="xs:string" name="cancelDate"/>
+                        <xs:attribute type="xs:string" name="dateOfApproval"/>
+                        <xs:attribute type="xs:boolean" name="resident"/>
+                        <xs:attribute type="xs:boolean" name="disable"/>
+                        <xs:attribute type="xs:string" name="position"/>
+                        <xs:attribute type="xs:decimal" name="numberOfReportingEmployees"/>
+                        <xs:attribute type="xs:string" name="mail"/>
+                        <xs:attribute type="xs:string" name="address"/>
+                        <xs:attribute type="xs:string" name="portfolio"/>
+                        <xs:attribute type="xs:boolean" name="dependencyStatus"/>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="histories" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="history" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="licenseCode" use="required"/>
+                            <xs:attribute type="licenseStatus" name="status" use="required"/>
+                            <xs:attribute type="xs:string" name="changeDate" use="required"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="branches">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="branch" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="name" type="descriptions"/>
+                          <xs:element name="shortname" type="descriptions"/>
+                          <xs:element name="address" type="descriptions"/>
+                          <xs:element name="chiefAccountant"  type="managerType"/>
+                          <xs:element name="manager" maxOccurs="1" minOccurs="0" type="managerType"/>
+                          <xs:element name="comment" type="descriptions" minOccurs="0"/>
+                          <xs:element name="person" type="personType" minOccurs="0"/>
+                        </xs:sequence>
+                        <xs:attribute type="xs:string" name="code" use="required"/>
+                        <xs:attribute type="xs:string" name="region"/>
+                        <xs:attribute type="xs:string" name="createDate"/>
+                        <xs:attribute type="xs:string" name="changeDate"/>
+                        <xs:attribute type="xs:boolean" name="disable"/>
+                        <xs:attribute type="xs:string" name="closeDate"/>
+                        <xs:attribute type="xs:string" name="suspensionDate"/>
+                        <xs:attribute type="xs:string" name="renewalDate"/>
+                        <xs:attribute type="xs:string" name="email"/>
+                        <xs:attribute type="xs:string" name="phone"/>
+                        <xs:attribute type="xs:string" name="registrationNumber"/>
+                        <xs:attribute type="xs:boolean" name="isStorageAvailable"/>
+                        <xs:attribute type="xs:string" name="typeCode" use="required"/>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="metaInfo">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="businessEntityType" maxOccurs="1" minOccurs="0">
+                      <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="descriptions" type="descriptions"/>
+                      </xs:sequence>
+                      <xs:attribute type="xs:string" name="code" use="required"/>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="economicEntityType" maxOccurs="1" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="descriptions" type="descriptions"/>
+                        </xs:sequence>
+                        <xs:attribute type="xs:string" name="code" use="required"/>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="equityFormType" maxOccurs="1" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="descriptions" type="descriptions"/>
+                        </xs:sequence>
+                        <xs:attribute type="xs:string" name="code" use="required"/>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="managementFormType" maxOccurs="1" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="descriptions" type="descriptions"/>
+                        </xs:sequence>
+                        <xs:attribute type="xs:string" name="code" use="required"/>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+
+              </xs:element>
+              <xs:element name="beneficiaries" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="beneficiary" minOccurs="0" maxOccurs="unbounded" >
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="finalBeneficiaries" type="finalBeneficiariesType" minOccurs="0" maxOccurs="1"/>
+                        </xs:sequence>
+                        <xs:attribute type="beneficiaryType" name="beneficiaryType" use="required"/>
+                        <xs:attribute type="percentageType" name="share" use="required"/>
+                        <xs:attribute type="xs:double" name="nominal"/>
+                        <xs:attribute type="xs:string" name="creationDate"/>
+                        <xs:attribute type="xs:boolean" name="active"/>
+                        <xs:attribute type="currencyType" name="currency" use="required"/>
+                        <xs:attribute type="xs:string" name="personIdNumber" use="required"/>
+                        <xs:attribute type="xs:string" name="countryCode" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="code"/>
+            <xs:attribute type="xs:string" name="region"/>
+            <xs:attribute type="xs:boolean" name="overwrite"/>
+            <xs:attribute type="xs:string" name="type"/>
+            <xs:attribute type="xs:string" name="swift"/>
+            <xs:attribute type="xs:string" name="phone"/>
+            <xs:attribute type="xs:string" name="fax"/>
+            <xs:attribute type="xs:string" name="email"/>
+            <xs:attribute type="xs:string" name="identificationCode"/>
+            <xs:attribute type="xs:string" name="legalForm"/>
+            <xs:attribute type="xs:string" name="contactPerson"/>
+            <xs:attribute type="xs:string" name="registrationDate"/>
+            <xs:attribute type="xs:string" name="closeDate"/>
+            <xs:attribute type="reorganizationType" name="reorganization"/>
+            <xs:attribute type="xs:string" name="representativePerson"/>
+            <xs:attribute type="xs:decimal" name="numberOfMobileOffices"/>
+            <xs:attribute type="xs:decimal" name="numberOfEmploys"/>
+            <xs:attribute type="xs:string" name="webSite"/>
+            <xs:attribute type="xs:boolean" name="disable"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

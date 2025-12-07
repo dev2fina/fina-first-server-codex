@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="nodes" type="translationNodes"/>
+    <xs:complexType name="translationNodes">
+        <xs:sequence>
+            <xs:element type="translationNode" name="node" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="translationNode">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="code" use="required"/>
+                <xs:attribute type="xs:string" name="langCode" use="required"/>
+                <xs:attribute type="xs:string" name="description" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>

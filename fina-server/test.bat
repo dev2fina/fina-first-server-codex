@@ -1,0 +1,1 @@
+mvn clean test -Parq-jbossas-remote -e

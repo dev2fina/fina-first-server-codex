@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="return-statuses" type="return-statusesType"/>
+  <xs:complexType name="statusType">
+    <xs:sequence>
+      <xs:element type="fileType" name="file"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="id" use="optional"/>
+    <xs:attribute type="xs:string" name="returnId" use="optional"/>
+    <xs:attribute type="xs:string" name="returnVersionId" use="optional"/>
+    <xs:attribute type="xs:string" name="note" use="optional"/>
+    <xs:attribute type="xs:string" name="userId" use="optional"/>
+    <xs:attribute type="xs:string" name="statusDate" use="optional"/>
+    <xs:attribute type="xs:string" name="status" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="return-statusesType">
+    <xs:sequence>
+      <xs:element type="statusType" name="status" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="fileType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="returnFileVersionId" use="optional"/>
+        <xs:attribute type="xs:string" name="mdtFileVersionId" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>
