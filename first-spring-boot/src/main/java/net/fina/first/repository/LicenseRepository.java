@@ -34,6 +34,15 @@ public interface LicenseRepository extends JpaRepository<License, Long>, JpaSpec
             @Param("fiRegistryId") Long fiRegistryId,
             @Param("status") LicenseStatus status);
 
+    @Query("SELECT l FROM License l WHERE l.fiRegistry.id = :fiRegistryId AND l.status = :status AND l.deleted = false")
+    Page<License> findByFiRegistryIdAndStatus(
+            @Param("fiRegistryId") Long fiRegistryId,
+            @Param("status") LicenseStatus status,
+            Pageable pageable);
+
+    @Query("SELECT l FROM License l WHERE l.fiRegistry.id = :fiRegistryId AND l.deleted = false")
+    Page<License> findByFiRegistryIdActive(@Param("fiRegistryId") Long fiRegistryId, Pageable pageable);
+
     @Query("SELECT l FROM License l WHERE l.status = :status AND l.expirationDate BETWEEN :startDate AND :endDate AND l.deleted = false")
     List<License> findExpiringLicenses(
             @Param("status") LicenseStatus status,

@@ -64,6 +64,13 @@ public class UserService {
         return userMapper.toResponse(user);
     }
 
+    /**
+     * Alias for findByLogin - finds user by username.
+     */
+    public UserResponse findByUsername(String username) {
+        return findByLogin(username);
+    }
+
     @Transactional
     public UserResponse create(String login, String email, String password,
                                String firstName, String lastName, Set<Long> roleIds) {

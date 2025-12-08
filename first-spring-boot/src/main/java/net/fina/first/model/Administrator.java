@@ -89,6 +89,9 @@ public class Administrator extends AuditableEntity {
     @Column(name = "termination_date")
     private LocalDate terminationDate;
 
+    @Column(name = "termination_reason", length = 1000)
+    private String terminationReason;
+
     // === Document Information ===
 
     @Column(name = "document_type", length = 100)

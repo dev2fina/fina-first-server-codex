@@ -55,6 +55,26 @@ public class RoleService {
         return roleMapper.toResponse(role);
     }
 
+    /**
+     * Finds role by name.
+     */
+    public RoleResponse findByName(String name) {
+        log.debug("Fetching role by name: {}", name);
+        Role role = roleRepository.findByName(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "name", name));
+        return roleMapper.toResponse(role);
+    }
+
+    /**
+     * Creates a new role with auto-generated code.
+     */
+    @Transactional
+    @CacheEvict(value = "roles", allEntries = true)
+    public RoleResponse create(String name, String description, Set<Long> permissionIds) {
+        String code = generateCodeFromName(name);
+        return create(code, name, description, permissionIds);
+    }
+
     @Transactional
     @CacheEvict(value = "roles", allEntries = true)
     public RoleResponse create(String code, String name, String description, Set<Long> permissionIds) {
@@ -169,5 +189,9 @@ public class RoleService {
 
         Role savedRole = roleRepository.save(role);
         return roleMapper.toResponse(savedRole);
+    }
+
+    private String generateCodeFromName(String name) {
+        return "ROLE_" + name.toUpperCase().replaceAll("[^A-Z0-9]", "_");
     }
 }

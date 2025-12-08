@@ -95,6 +95,13 @@ public class Branch extends AuditableEntity {
     @Column(name = "cancellation_date")
     private LocalDate cancellationDate;
 
+    @Column(name = "cancellation_reason", length = 1000)
+    private String cancellationReason;
+
+    @Column(name = "is_head_office")
+    @Builder.Default
+    private boolean headOffice = false;
+
     // === Legal Act ===
 
     @Column(name = "legal_act_number", length = 100)
