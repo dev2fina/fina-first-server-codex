@@ -18,6 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import net.fina.first.model.enums.FiTypeCode;
+
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -51,7 +54,7 @@ class FiRegistryControllerTest {
         fiRegistryResponse = new FiRegistryResponse();
         fiRegistryResponse.setId(1L);
         fiRegistryResponse.setCode("FI-001");
-        fiRegistryResponse.setName("Test Bank");
+        fiRegistryResponse.setFirmName("Test Bank");
     }
 
     @Test
@@ -65,8 +68,17 @@ class FiRegistryControllerTest {
     @DisplayName("Should return paginated FI registries when authenticated")
     @WithMockUser(authorities = "FI_REGISTRY_READ")
     void shouldReturnPaginatedFiRegistries() throws Exception {
-        PageResponse<FiRegistryResponse> pageResponse = PageResponse.of(
-                List.of(fiRegistryResponse), 1, 20, 0, 1);
+        PageResponse<FiRegistryResponse> pageResponse = PageResponse.<FiRegistryResponse>builder()
+                .content(List.of(fiRegistryResponse))
+                .page(0)
+                .size(20)
+                .totalElements(1)
+                .totalPages(1)
+                .first(true)
+                .last(true)
+                .hasNext(false)
+                .hasPrevious(false)
+                .build();
 
         when(fiRegistryService.findAll(any(), any(), any(), any(Pageable.class)))
                 .thenReturn(pageResponse);
@@ -94,8 +106,16 @@ class FiRegistryControllerTest {
     @WithMockUser(authorities = "FI_REGISTRY_CREATE")
     void shouldCreateFiRegistry() throws Exception {
         FiRegistryCreateRequest request = new FiRegistryCreateRequest();
-        request.setName("New Bank");
-        request.setFiTypeId(1L);
+        request.setFirmName("New Bank");
+        request.setFiTypeCode(FiTypeCode.BANK);
+        request.setApplicationNumber("APP-2024-001");
+        request.setApplicationReceivedDate(LocalDate.now());
+        request.setLegalFormId(1L);
+        request.setLegalAddressRegionId(1L);
+        request.setLegalAddressCity("Tbilisi");
+        request.setLegalAddress("123 Main Street");
+        request.setPhone("+995555123456");
+        request.setEmail("info@newbank.ge");
 
         when(fiRegistryService.create(any(FiRegistryCreateRequest.class)))
                 .thenReturn(fiRegistryResponse);
