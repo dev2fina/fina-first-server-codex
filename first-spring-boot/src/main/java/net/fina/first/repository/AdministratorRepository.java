@@ -28,6 +28,9 @@ public interface AdministratorRepository extends JpaRepository<Administrator, Lo
     @Query("SELECT a FROM Administrator a WHERE a.fiRegistry.id = :fiRegistryId AND a.active = true AND a.deleted = false")
     List<Administrator> findCurrentByFiRegistryId(@Param("fiRegistryId") Long fiRegistryId);
 
+    @Query("SELECT a FROM Administrator a WHERE a.fiRegistry.id = :fiRegistryId AND a.active = true AND a.deleted = false")
+    Page<Administrator> findCurrentByFiRegistryId(@Param("fiRegistryId") Long fiRegistryId, Pageable pageable);
+
     Optional<Administrator> findByFiRegistryIdAndIdentificationNumber(Long fiRegistryId, String identificationNumber);
 
     @Query("SELECT a FROM Administrator a WHERE a.fiRegistry.id = :fiRegistryId AND a.position = :position AND a.deleted = false")

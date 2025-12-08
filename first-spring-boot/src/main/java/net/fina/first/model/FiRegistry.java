@@ -224,6 +224,11 @@ public class FiRegistry extends AuditableEntity {
     @Column(name = "cancellation_reason", length = 1000)
     private String cancellationReason;
 
+    // === ECM Integration ===
+
+    @Column(name = "ecm_folder_id", length = 100)
+    private String ecmFolderId;
+
     // === Relationships ===
 
     @OneToMany(mappedBy = "fiRegistry", cascade = CascadeType.ALL, orphanRemoval = true)

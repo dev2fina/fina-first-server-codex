@@ -29,9 +29,19 @@ public class FiTypeService {
     private final FiTypeMapper fiTypeMapper;
 
     /**
-     * Retrieves all active FI types.
+     * Retrieves all FI types (alias for findAllActive).
      */
     @Cacheable(value = FI_TYPES_CACHE, key = "'all'")
+    public List<FiTypeResponse> findAll() {
+        log.debug("Finding all FI types");
+        List<FiType> fiTypes = fiTypeRepository.findAllActive();
+        return fiTypeMapper.toResponseList(fiTypes);
+    }
+
+    /**
+     * Retrieves all active FI types.
+     */
+    @Cacheable(value = FI_TYPES_CACHE, key = "'active'")
     public List<FiTypeResponse> findAllActive() {
         log.debug("Finding all active FI types");
         List<FiType> fiTypes = fiTypeRepository.findAllActive();

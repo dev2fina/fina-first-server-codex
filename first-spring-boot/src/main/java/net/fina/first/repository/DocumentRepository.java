@@ -30,13 +30,24 @@ public interface DocumentRepository extends JpaRepository<Document, Long>, JpaSp
     @Query("SELECT d FROM Document d WHERE d.fiRegistry.id = :fiRegistryId AND d.deleted = false")
     List<Document> findActiveByFiRegistryId(@Param("fiRegistryId") Long fiRegistryId);
 
+    @Query("SELECT d FROM Document d WHERE d.fiRegistry.id = :fiRegistryId AND d.deleted = false")
+    List<Document> findByFiRegistryIdAndDeletedFalse(@Param("fiRegistryId") Long fiRegistryId);
+
     @Query("SELECT d FROM Document d WHERE d.fiRegistry.id = :fiRegistryId AND d.documentType = :documentType AND d.deleted = false")
     List<Document> findByFiRegistryIdAndDocumentType(
             @Param("fiRegistryId") Long fiRegistryId,
             @Param("documentType") DocumentType documentType);
 
+    @Query("SELECT d FROM Document d WHERE d.fiRegistry.id = :fiRegistryId AND d.documentType = :documentType AND d.deleted = false")
+    List<Document> findByFiRegistryIdAndDocumentTypeAndDeletedFalse(
+            @Param("fiRegistryId") Long fiRegistryId,
+            @Param("documentType") DocumentType documentType);
+
     @Query("SELECT d FROM Document d WHERE d.action.id = :actionId AND d.deleted = false")
     List<Document> findActiveByActionId(@Param("actionId") Long actionId);
+
+    @Query("SELECT d FROM Document d WHERE d.action.id = :actionId AND d.deleted = false")
+    List<Document> findByActionIdAndDeletedFalse(@Param("actionId") Long actionId);
 
     @Query("SELECT d FROM Document d WHERE d.branch.id = :branchId AND d.deleted = false")
     List<Document> findActiveByBranchId(@Param("branchId") Long branchId);

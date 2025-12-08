@@ -27,6 +27,9 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     boolean existsByEmail(String email);
 
+    @Query("SELECT COUNT(u) > 0 FROM User u JOIN u.roles r WHERE r.id = :roleId")
+    boolean existsByRolesId(@Param("roleId") Long roleId);
+
     @Query("SELECT u FROM User u WHERE u.deleted = false")
     Page<User> findAllActive(Pageable pageable);
 

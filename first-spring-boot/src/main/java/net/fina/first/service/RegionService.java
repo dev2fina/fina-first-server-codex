@@ -28,9 +28,19 @@ public class RegionService {
     private final RegionMapper regionMapper;
 
     /**
-     * Retrieves all active regions.
+     * Retrieves all regions (alias for findAllActive).
      */
     @Cacheable(value = REGIONS_CACHE, key = "'all'")
+    public List<RegionResponse> findAll() {
+        log.debug("Finding all regions");
+        List<Region> regions = regionRepository.findAllActive();
+        return regionMapper.toResponseList(regions);
+    }
+
+    /**
+     * Retrieves all active regions.
+     */
+    @Cacheable(value = REGIONS_CACHE, key = "'active'")
     public List<RegionResponse> findAllActive() {
         log.debug("Finding all active regions");
         List<Region> regions = regionRepository.findAllActive();
@@ -38,12 +48,30 @@ public class RegionService {
     }
 
     /**
-     * Retrieves root regions (top-level).
+     * Retrieves root regions (alias for findRootRegions).
      */
     @Cacheable(value = REGIONS_CACHE, key = "'roots'")
+    public List<RegionResponse> findRoots() {
+        log.debug("Finding root regions");
+        List<Region> regions = regionRepository.findRootRegions();
+        return regionMapper.toResponseList(regions);
+    }
+
+    /**
+     * Retrieves root regions (top-level).
+     */
     public List<RegionResponse> findRootRegions() {
         log.debug("Finding root regions");
         List<Region> regions = regionRepository.findRootRegions();
+        return regionMapper.toResponseList(regions);
+    }
+
+    /**
+     * Retrieves child regions of a parent (alias for findByParentId).
+     */
+    public List<RegionResponse> findChildren(Long parentId) {
+        log.debug("Finding children of region ID: {}", parentId);
+        List<Region> regions = regionRepository.findByParentId(parentId);
         return regionMapper.toResponseList(regions);
     }
 

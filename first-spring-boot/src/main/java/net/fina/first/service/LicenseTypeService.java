@@ -26,7 +26,7 @@ public class LicenseTypeService {
     @Cacheable(value = "licenseTypes")
     public List<LicenseTypeResponse> findAll() {
         log.debug("Fetching all license types");
-        List<LicenseType> licenseTypes = licenseTypeRepository.findAllByOrderByNameAsc();
+        List<LicenseType> licenseTypes = licenseTypeRepository.findAllOrderByNameAsc();
         return licenseTypeMapper.toResponseList(licenseTypes);
     }
 

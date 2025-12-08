@@ -15,6 +15,8 @@ import net.fina.first.repository.BeneficiaryRepository;
 import net.fina.first.repository.FiRegistryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,42 @@ public class BeneficiaryService {
         log.debug("Finding beneficiaries for FI registry ID: {}", fiRegistryId);
         List<Beneficiary> beneficiaries = beneficiaryRepository.findActiveByFiRegistryId(fiRegistryId);
         return beneficiaryMapper.toResponseList(beneficiaries);
+    }
+
+    /**
+     * Retrieves beneficiaries with filters and pagination - for controller use.
+     */
+    public PageResponse<BeneficiaryResponse> findByFiRegistry(Long fiRegistryId, BeneficiaryType type,
+                                                               String search, Pageable pageable) {
+        log.debug("Finding beneficiaries for FI registry ID: {} with type: {} and search: {}",
+                fiRegistryId, type, search);
+
+        Page<Beneficiary> page;
+        if (type != null) {
+            page = beneficiaryRepository.findByFiRegistryIdAndType(fiRegistryId, type, pageable);
+        } else {
+            page = beneficiaryRepository.findByFiRegistryId(fiRegistryId, pageable);
+        }
+
+        return PageResponse.of(page, beneficiaryMapper.toResponseList(page.getContent()));
+    }
+
+    /**
+     * Retrieves beneficiary hierarchy (tree structure) for an FI registry.
+     */
+    public List<BeneficiaryResponse> findBeneficiaryHierarchy(Long fiRegistryId) {
+        log.debug("Finding beneficiary hierarchy for FI registry ID: {}", fiRegistryId);
+        List<Beneficiary> rootBeneficiaries = beneficiaryRepository.findRootBeneficiariesByFiRegistryId(fiRegistryId);
+        return beneficiaryMapper.toResponseWithChildrenList(rootBeneficiaries);
+    }
+
+    /**
+     * Retrieves child beneficiaries for a given parent.
+     */
+    public List<BeneficiaryResponse> findChildBeneficiaries(Long parentId) {
+        log.debug("Finding child beneficiaries for parent ID: {}", parentId);
+        List<Beneficiary> children = beneficiaryRepository.findByParentId(parentId);
+        return beneficiaryMapper.toResponseList(children);
     }
 
     /**
@@ -182,21 +220,30 @@ public class BeneficiaryService {
      * Soft deletes a beneficiary and all its children.
      */
     @Transactional
-    public void delete(Long id, String deletedBy) {
+    public void delete(Long id) {
         log.info("Deleting beneficiary with ID: {}", id);
 
         Beneficiary beneficiary = findEntityById(id);
 
         // Recursively delete children
-        deleteWithChildren(beneficiary, deletedBy);
+        deleteWithChildren(beneficiary, getCurrentUsername());
 
         log.info("Beneficiary {} soft deleted with children", beneficiary.getDisplayName());
     }
 
     /**
+     * Calculates total ownership percentage for a specific beneficiary.
+     */
+    public double calculateTotalOwnership(Long beneficiaryId) {
+        Beneficiary beneficiary = findEntityById(beneficiaryId);
+        BigDecimal percentage = beneficiary.getCapitalPercentage();
+        return percentage != null ? percentage.doubleValue() : 0.0;
+    }
+
+    /**
      * Calculates total ownership percentage for root beneficiaries.
      */
-    public BigDecimal calculateTotalOwnership(Long fiRegistryId) {
+    public BigDecimal calculateTotalOwnershipForFiRegistry(Long fiRegistryId) {
         return beneficiaryRepository.sumRootCapitalPercentageByFiRegistryId(fiRegistryId);
     }
 
@@ -292,5 +339,13 @@ public class BeneficiaryService {
         // Then delete the beneficiary itself
         beneficiary.markAsDeleted(deletedBy);
         beneficiaryRepository.save(beneficiary);
+    }
+
+    private String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return authentication.getName();
+        }
+        return "system";
     }
 }

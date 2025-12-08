@@ -73,4 +73,12 @@ public interface BeneficiaryMapper {
         }
         return entities.stream().map(this::toResponse).toList();
     }
+
+    @Named("toResponseWithChildrenList")
+    default List<BeneficiaryResponse> toResponseWithChildrenList(List<Beneficiary> entities) {
+        if (entities == null) {
+            return null;
+        }
+        return entities.stream().map(this::toResponseWithChildren).toList();
+    }
 }

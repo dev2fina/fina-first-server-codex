@@ -24,6 +24,12 @@ public interface BeneficiaryRepository extends JpaRepository<Beneficiary, Long>,
 
     Page<Beneficiary> findByFiRegistryId(Long fiRegistryId, Pageable pageable);
 
+    @Query("SELECT b FROM Beneficiary b WHERE b.fiRegistry.id = :fiRegistryId AND b.type = :type AND b.deleted = false")
+    Page<Beneficiary> findByFiRegistryIdAndType(
+            @Param("fiRegistryId") Long fiRegistryId,
+            @Param("type") BeneficiaryType type,
+            Pageable pageable);
+
     @Query("SELECT b FROM Beneficiary b WHERE b.fiRegistry.id = :fiRegistryId AND b.deleted = false")
     List<Beneficiary> findActiveByFiRegistryId(@Param("fiRegistryId") Long fiRegistryId);
 

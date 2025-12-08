@@ -65,6 +65,11 @@ public class Document extends AuditableEntity {
     @Column(name = "description", length = 2000)
     private String description;
 
+    // === ECM Integration ===
+
+    @Column(name = "ecm_node_id", length = 100)
+    private String ecmNodeId;
+
     // === File Information ===
 
     @Column(name = "file_uuid", length = 100)
@@ -72,6 +77,9 @@ public class Document extends AuditableEntity {
 
     @Column(name = "file_name", length = 500)
     private String fileName;
+
+    @Column(name = "original_file_name", length = 500)
+    private String originalFileName;
 
     @Column(name = "file_path", length = 1000)
     private String filePath;
@@ -105,4 +113,30 @@ public class Document extends AuditableEntity {
 
     @Column(name = "sequence")
     private Integer sequence;
+
+    // === Alias methods for compatibility ===
+
+    public String getContentType() {
+        return mimeType;
+    }
+
+    public void setContentType(String contentType) {
+        this.mimeType = contentType;
+    }
+
+    public String getDocumentNumber() {
+        return number;
+    }
+
+    public void setDocumentNumber(String documentNumber) {
+        this.number = documentNumber;
+    }
+
+    public String getDisplayName() {
+        return name;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.name = displayName;
+    }
 }

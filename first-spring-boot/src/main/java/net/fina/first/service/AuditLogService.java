@@ -50,58 +50,88 @@ public class AuditLogService {
     private AuditLog createAuditLog(String action, String entityType, Long entityId,
                                      String oldValue, String newValue) {
         AuditLog auditLog = new AuditLog();
-        auditLog.setAction(action);
-        auditLog.setEntityType(entityType);
+        auditLog.setOperationType(mapActionToOperationType(action));
+        auditLog.setEntityName(entityType);
         auditLog.setEntityId(entityId);
         auditLog.setOldValue(truncateIfNeeded(oldValue));
         auditLog.setNewValue(truncateIfNeeded(newValue));
-        auditLog.setTimestamp(LocalDateTime.now());
-        auditLog.setUsername(getCurrentUsername());
-        auditLog.setIpAddress(getCurrentIpAddress());
+        auditLog.setRelevanceTime(LocalDateTime.now());
+        auditLog.setActorLogin(getCurrentUsername());
+        auditLog.setClientIp(getCurrentIpAddress());
         auditLog.setUserAgent(getCurrentUserAgent());
+        auditLog.setDescription(action);
         return auditLog;
+    }
+
+    private AuditLog.OperationType mapActionToOperationType(String action) {
+        if (action == null) return AuditLog.OperationType.UPDATE;
+
+        String upperAction = action.toUpperCase();
+        if (upperAction.contains("CREATE") || upperAction.contains("UPLOAD")) {
+            return AuditLog.OperationType.CREATE;
+        } else if (upperAction.contains("UPDATE") || upperAction.contains("CHANGE") || upperAction.contains("RESET")) {
+            return AuditLog.OperationType.UPDATE;
+        } else if (upperAction.contains("DELETE") || upperAction.contains("DEACTIVATE")) {
+            return AuditLog.OperationType.DELETE;
+        } else if (upperAction.contains("LOGIN")) {
+            return AuditLog.OperationType.LOGIN;
+        } else if (upperAction.contains("LOGOUT")) {
+            return AuditLog.OperationType.LOGOUT;
+        } else if (upperAction.contains("PASSWORD")) {
+            return AuditLog.OperationType.PASSWORD_CHANGE;
+        } else if (upperAction.contains("GENERATE")) {
+            return AuditLog.OperationType.GENERATE;
+        } else if (upperAction.contains("EXPORT")) {
+            return AuditLog.OperationType.EXPORT;
+        } else if (upperAction.contains("IMPORT")) {
+            return AuditLog.OperationType.IMPORT;
+        }
+        return AuditLog.OperationType.UPDATE;
     }
 
     @Transactional(readOnly = true)
     public PageResponse<AuditLog> findByEntityTypeAndEntityId(String entityType, Long entityId,
                                                                Pageable pageable) {
-        Page<AuditLog> page = auditLogRepository.findByEntityTypeAndEntityIdOrderByTimestampDesc(
+        Page<AuditLog> page = auditLogRepository.findByEntityNameAndEntityIdOrderByRelevanceTimeDesc(
                 entityType, entityId, pageable);
-        return PageResponse.of(page.getContent(), page);
+        return PageResponse.of(page, page.getContent());
     }
 
     @Transactional(readOnly = true)
     public PageResponse<AuditLog> findByUsername(String username, Pageable pageable) {
-        Page<AuditLog> page = auditLogRepository.findByUsernameOrderByTimestampDesc(username, pageable);
-        return PageResponse.of(page.getContent(), page);
+        Page<AuditLog> page = auditLogRepository.findByActorLogin(username, pageable);
+        return PageResponse.of(page, page.getContent());
     }
 
     @Transactional(readOnly = true)
     public PageResponse<AuditLog> findByAction(String action, Pageable pageable) {
-        Page<AuditLog> page = auditLogRepository.findByActionOrderByTimestampDesc(action, pageable);
-        return PageResponse.of(page.getContent(), page);
+        AuditLog.OperationType operationType = mapActionToOperationType(action);
+        Page<AuditLog> page = auditLogRepository.findByOperationType(operationType, pageable);
+        return PageResponse.of(page, page.getContent());
     }
 
     @Transactional(readOnly = true)
     public PageResponse<AuditLog> findByDateRange(LocalDateTime from, LocalDateTime to,
                                                    Pageable pageable) {
-        Page<AuditLog> page = auditLogRepository.findByTimestampBetweenOrderByTimestampDesc(
-                from, to, pageable);
-        return PageResponse.of(page.getContent(), page);
+        Page<AuditLog> page = auditLogRepository.findByRelevanceTimeBetween(from, to, pageable);
+        return PageResponse.of(page, page.getContent());
     }
 
     @Transactional(readOnly = true)
     public List<AuditLog> findRecentByEntity(String entityType, Long entityId, int limit) {
-        return auditLogRepository.findTopByEntityTypeAndEntityIdOrderByTimestampDesc(
-                entityType, entityId, Pageable.ofSize(limit)).getContent();
+        return auditLogRepository.findByEntityIdAndEntityName(entityId, entityType)
+                .stream()
+                .limit(limit)
+                .toList();
     }
 
     @Transactional(readOnly = true)
     public PageResponse<AuditLog> search(String entityType, String action, String username,
                                          LocalDateTime from, LocalDateTime to, Pageable pageable) {
+        AuditLog.OperationType operationType = action != null ? mapActionToOperationType(action) : null;
         Page<AuditLog> page = auditLogRepository.searchAuditLogs(
-                entityType, action, username, from, to, pageable);
-        return PageResponse.of(page.getContent(), page);
+                entityType, operationType, username, from, to, pageable);
+        return PageResponse.of(page, page.getContent());
     }
 
     private String getCurrentUsername() {

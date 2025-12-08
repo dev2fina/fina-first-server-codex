@@ -18,6 +18,8 @@ import net.fina.first.repository.FiRegistryRepository;
 import net.fina.first.repository.RegionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,6 +55,43 @@ public class BranchService {
         log.debug("Finding branches for FI registry ID: {} with pagination", fiRegistryId);
         Page<Branch> page = branchRepository.findByFiRegistryId(fiRegistryId, pageable);
         return PageResponse.of(page, branchMapper.toResponseList(page.getContent()));
+    }
+
+    /**
+     * Retrieves branches with filters and pagination - for controller use.
+     */
+    public PageResponse<BranchResponse> findByFiRegistry(Long fiRegistryId, BranchStatus status,
+                                                          String search, Pageable pageable) {
+        log.debug("Finding branches for FI registry ID: {} with status: {} and search: {}",
+                fiRegistryId, status, search);
+
+        Page<Branch> page;
+        if (status != null) {
+            page = branchRepository.findByFiRegistryIdAndStatus(fiRegistryId, status, pageable);
+        } else {
+            page = branchRepository.findByFiRegistryId(fiRegistryId, pageable);
+        }
+
+        return PageResponse.of(page, branchMapper.toResponseList(page.getContent()));
+    }
+
+    /**
+     * Retrieves the head office branch for an FI registry.
+     */
+    public BranchResponse getHeadOffice(Long fiRegistryId) {
+        log.debug("Finding head office for FI registry ID: {}", fiRegistryId);
+        return branchRepository.findHeadOfficeByFiRegistryId(fiRegistryId)
+                .map(branchMapper::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Branch", "headOffice", fiRegistryId));
+    }
+
+    /**
+     * Retrieves all active branches for an FI registry.
+     */
+    public List<BranchResponse> findActiveBranches(Long fiRegistryId) {
+        log.debug("Finding active branches for FI registry ID: {}", fiRegistryId);
+        List<Branch> branches = branchRepository.findByFiRegistryIdAndStatus(fiRegistryId, BranchStatus.ACTIVE);
+        return branchMapper.toResponseList(branches);
     }
 
     /**
@@ -137,7 +176,7 @@ public class BranchService {
      * Soft deletes a branch.
      */
     @Transactional
-    public void delete(Long id, String deletedBy) {
+    public void delete(Long id) {
         log.info("Deleting branch with ID: {}", id);
 
         Branch branch = findEntityById(id);
@@ -146,7 +185,7 @@ public class BranchService {
             throw new BusinessException("Cannot delete an active branch");
         }
 
-        branch.markAsDeleted(deletedBy);
+        branch.markAsDeleted(getCurrentUsername());
         branchRepository.save(branch);
 
         log.info("Branch {} soft deleted", branch.getCode());
@@ -168,15 +207,18 @@ public class BranchService {
     }
 
     /**
-     * Closes a branch.
+     * Closes a branch with optional reason.
      */
     @Transactional
-    public BranchResponse close(Long id) {
-        log.info("Closing branch with ID: {}", id);
+    public BranchResponse close(Long id, String reason) {
+        log.info("Closing branch with ID: {}, reason: {}", id, reason);
 
         Branch branch = findEntityById(id);
         branch.setStatus(BranchStatus.CLOSED);
         branch.setCancellationDate(java.time.LocalDate.now());
+        if (reason != null) {
+            branch.setCancellationReason(reason);
+        }
         Branch saved = branchRepository.save(branch);
 
         log.info("Branch {} closed", saved.getCode());
@@ -195,5 +237,13 @@ public class BranchService {
         return fiRegistryRepository.findById(id)
                 .filter(fi -> !fi.isDeleted())
                 .orElseThrow(() -> new ResourceNotFoundException("FiRegistry", "id", id));
+    }
+
+    private String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return authentication.getName();
+        }
+        return "system";
     }
 }

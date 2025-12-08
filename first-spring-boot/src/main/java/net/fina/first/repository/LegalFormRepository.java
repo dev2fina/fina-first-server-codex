@@ -20,4 +20,10 @@ public interface LegalFormRepository extends JpaRepository<LegalForm, Long> {
 
     @Query("SELECT l FROM LegalForm l WHERE l.active = true ORDER BY l.sequence")
     List<LegalForm> findAllActive();
+
+    @Query("SELECT l FROM LegalForm l ORDER BY l.sequence ASC")
+    List<LegalForm> findAllOrderBySortOrderAsc();
+
+    @Query("SELECT l FROM LegalForm l WHERE l.active = true ORDER BY l.sequence ASC")
+    List<LegalForm> findActiveOrderBySortOrderAsc();
 }

@@ -20,8 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -43,12 +43,11 @@ public class UserService {
         log.debug("Fetching users with search: {}", search);
         Page<User> page;
         if (search != null && !search.isBlank()) {
-            page = userRepository.searchUsers(search, pageable);
+            page = userRepository.searchByTerm(search, pageable);
         } else {
             page = userRepository.findAll(pageable);
         }
-        List<UserResponse> content = userMapper.toResponseList(page.getContent());
-        return PageResponse.of(content, page);
+        return PageResponse.of(page, userMapper.toResponseList(page.getContent()));
     }
 
     public UserResponse findById(Long id) {
@@ -58,30 +57,30 @@ public class UserService {
         return userMapper.toResponse(user);
     }
 
-    public UserResponse findByUsername(String username) {
-        log.debug("Fetching user by username: {}", username);
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+    public UserResponse findByLogin(String login) {
+        log.debug("Fetching user by login: {}", login);
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "login", login));
         return userMapper.toResponse(user);
     }
 
     @Transactional
-    public UserResponse create(String username, String email, String password,
+    public UserResponse create(String login, String email, String password,
                                String firstName, String lastName, Set<Long> roleIds) {
-        log.info("Creating new user: {}", username);
+        log.info("Creating new user: {}", login);
 
-        validateUniqueUsername(username);
+        validateUniqueLogin(login);
         validateUniqueEmail(email);
 
         User user = new User();
-        user.setUsername(username);
+        user.setLogin(login);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setActive(true);
-        user.setAccountLocked(false);
-        user.setCredentialsExpired(false);
+        user.setDisabled(false);
+        user.setBlocked(false);
+        user.setChangePassword(true);
         user.setFailedLoginAttempts(0);
 
         if (roleIds != null && !roleIds.isEmpty()) {
@@ -148,8 +147,8 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
-        user.setPasswordChangedAt(LocalDateTime.now());
-        user.setCredentialsExpired(false);
+        user.setLastPasswordChangeDate(LocalDateTime.now());
+        user.setChangePassword(false);
 
         userRepository.save(user);
         addPasswordToHistory(user, encodedPassword);
@@ -166,9 +165,10 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
-        user.setPasswordChangedAt(LocalDateTime.now());
-        user.setCredentialsExpired(true);
-        user.setAccountLocked(false);
+        user.setLastPasswordChangeDate(LocalDateTime.now());
+        user.setChangePassword(true);
+        user.setBlocked(false);
+        user.setLockedUntil(null);
         user.setFailedLoginAttempts(0);
 
         userRepository.save(user);
@@ -184,8 +184,8 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        user.setAccountLocked(true);
-        user.setLockedAt(LocalDateTime.now());
+        user.setBlocked(true);
+        user.setLockedUntil(LocalDateTime.now().plusYears(100));
         userRepository.save(user);
 
         auditLogService.log("ACCOUNT_LOCK", "User", userId, null, "Account locked");
@@ -198,8 +198,8 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        user.setAccountLocked(false);
-        user.setLockedAt(null);
+        user.setBlocked(false);
+        user.setLockedUntil(null);
         user.setFailedLoginAttempts(0);
         userRepository.save(user);
 
@@ -213,7 +213,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        user.setActive(false);
+        user.setDisabled(true);
         userRepository.save(user);
 
         auditLogService.log("USER_DEACTIVATE", "User", userId, null, "User deactivated");
@@ -226,22 +226,22 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        user.setActive(true);
+        user.setDisabled(false);
         userRepository.save(user);
 
         auditLogService.log("USER_ACTIVATE", "User", userId, null, "User activated");
     }
 
     @Transactional
-    public void recordFailedLogin(String username) {
-        userRepository.findByUsername(username).ifPresent(user -> {
+    public void recordFailedLogin(String login) {
+        userRepository.findByLogin(login).ifPresent(user -> {
             int attempts = user.getFailedLoginAttempts() + 1;
             user.setFailedLoginAttempts(attempts);
 
             if (attempts >= MAX_FAILED_ATTEMPTS) {
-                user.setAccountLocked(true);
-                user.setLockedAt(LocalDateTime.now());
-                log.warn("Account locked due to {} failed login attempts: {}", attempts, username);
+                user.setBlocked(true);
+                user.setLockedUntil(LocalDateTime.now().plusMinutes(30));
+                log.warn("Account locked due to {} failed login attempts: {}", attempts, login);
             }
 
             userRepository.save(user);
@@ -249,17 +249,17 @@ public class UserService {
     }
 
     @Transactional
-    public void recordSuccessfulLogin(String username) {
-        userRepository.findByUsername(username).ifPresent(user -> {
+    public void recordSuccessfulLogin(String login) {
+        userRepository.findByLogin(login).ifPresent(user -> {
             user.setFailedLoginAttempts(0);
-            user.setLastLoginAt(LocalDateTime.now());
+            user.setLastLoginDate(LocalDateTime.now());
             userRepository.save(user);
         });
     }
 
-    private void validateUniqueUsername(String username) {
-        if (userRepository.existsByUsername(username)) {
-            throw new DuplicateResourceException("User", "username", username);
+    private void validateUniqueLogin(String login) {
+        if (userRepository.existsByLogin(login)) {
+            throw new DuplicateResourceException("User", "login", login);
         }
     }
 
@@ -278,9 +278,9 @@ public class UserService {
     }
 
     private void validatePasswordNotInHistory(User user, String newPassword) {
-        List<UserPasswordHistory> history = user.getPasswordHistory();
+        Set<UserPasswordHistory> history = user.getPasswordHistory();
         for (UserPasswordHistory ph : history) {
-            if (passwordEncoder.matches(newPassword, ph.getPassword())) {
+            if (passwordEncoder.matches(newPassword, ph.getPasswordHash())) {
                 throw new BusinessException("Password was used recently. Please choose a different password.");
             }
         }
@@ -289,14 +289,14 @@ public class UserService {
     private void addPasswordToHistory(User user, String encodedPassword) {
         UserPasswordHistory history = new UserPasswordHistory();
         history.setUser(user);
-        history.setPassword(encodedPassword);
-        history.setCreatedAt(LocalDateTime.now());
+        history.setPasswordHash(encodedPassword);
+        history.setChangedAt(LocalDateTime.now());
 
         user.getPasswordHistory().add(history);
 
         if (user.getPasswordHistory().size() > PASSWORD_HISTORY_SIZE) {
             user.getPasswordHistory().stream()
-                    .min((h1, h2) -> h1.getCreatedAt().compareTo(h2.getCreatedAt()))
+                    .min(Comparator.comparing(UserPasswordHistory::getChangedAt))
                     .ifPresent(oldest -> user.getPasswordHistory().remove(oldest));
         }
     }

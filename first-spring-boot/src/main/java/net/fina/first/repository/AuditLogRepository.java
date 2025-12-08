@@ -23,6 +23,12 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, Long>, JpaSp
             @Param("entityId") Long entityId,
             @Param("entityName") String entityName);
 
+    @Query("SELECT a FROM AuditLog a WHERE a.entityName = :entityName AND a.entityId = :entityId ORDER BY a.relevanceTime DESC")
+    Page<AuditLog> findByEntityNameAndEntityIdOrderByRelevanceTimeDesc(
+            @Param("entityName") String entityName,
+            @Param("entityId") Long entityId,
+            Pageable pageable);
+
     @Query("SELECT a FROM AuditLog a WHERE a.actorLogin = :actorLogin ORDER BY a.relevanceTime DESC")
     Page<AuditLog> findByActorLogin(@Param("actorLogin") String actorLogin, Pageable pageable);
 
@@ -35,5 +41,20 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, Long>, JpaSp
     @Query("SELECT a FROM AuditLog a WHERE a.operationType = :operationType ORDER BY a.relevanceTime DESC")
     Page<AuditLog> findByOperationType(
             @Param("operationType") AuditLog.OperationType operationType,
+            Pageable pageable);
+
+    @Query("SELECT a FROM AuditLog a WHERE " +
+           "(:entityName IS NULL OR a.entityName = :entityName) AND " +
+           "(:operationType IS NULL OR a.operationType = :operationType) AND " +
+           "(:actorLogin IS NULL OR a.actorLogin = :actorLogin) AND " +
+           "(:fromDate IS NULL OR a.relevanceTime >= :fromDate) AND " +
+           "(:toDate IS NULL OR a.relevanceTime <= :toDate) " +
+           "ORDER BY a.relevanceTime DESC")
+    Page<AuditLog> searchAuditLogs(
+            @Param("entityName") String entityName,
+            @Param("operationType") AuditLog.OperationType operationType,
+            @Param("actorLogin") String actorLogin,
+            @Param("fromDate") LocalDateTime fromDate,
+            @Param("toDate") LocalDateTime toDate,
             Pageable pageable);
 }

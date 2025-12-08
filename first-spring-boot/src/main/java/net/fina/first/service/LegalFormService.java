@@ -25,7 +25,7 @@ public class LegalFormService {
     @Cacheable(value = "legalForms")
     public List<LegalFormResponse> findAll() {
         log.debug("Fetching all legal forms");
-        List<LegalForm> legalForms = legalFormRepository.findAllByOrderBySortOrderAsc();
+        List<LegalForm> legalForms = legalFormRepository.findAllOrderBySortOrderAsc();
         return legalFormMapper.toResponseList(legalForms);
     }
 
@@ -47,7 +47,7 @@ public class LegalFormService {
 
     public List<LegalFormResponse> findActive() {
         log.debug("Fetching active legal forms");
-        List<LegalForm> legalForms = legalFormRepository.findByActiveTrueOrderBySortOrderAsc();
+        List<LegalForm> legalForms = legalFormRepository.findActiveOrderBySortOrderAsc();
         return legalFormMapper.toResponseList(legalForms);
     }
 }

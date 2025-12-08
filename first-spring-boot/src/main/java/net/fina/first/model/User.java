@@ -183,6 +183,6 @@ public class User extends AuditableEntity {
     }
 
     public boolean isAccountActive() {
-        return !blocked && !disabled && !deleted;
+        return !blocked && !disabled && !isDeleted();
     }
 }
