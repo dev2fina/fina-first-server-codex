@@ -63,5 +63,10 @@ public interface LicenseMapper {
     @Mapping(target = "valid", expression = "java(entity.isValid())")
     LicenseResponse toResponse(License entity);
 
-    List<LicenseResponse> toResponseList(List<License> entities);
+    default List<LicenseResponse> toResponseList(List<License> entities) {
+        if (entities == null) {
+            return null;
+        }
+        return entities.stream().map(this::toResponse).toList();
+    }
 }

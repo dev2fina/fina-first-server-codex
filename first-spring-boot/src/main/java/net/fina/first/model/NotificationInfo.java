@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import net.fina.first.model.base.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -25,7 +26,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class NotificationInfo extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

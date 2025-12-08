@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import net.fina.first.model.base.AuditableEntity;
 import net.fina.first.model.enums.LicenseStatus;
 import org.hibernate.envers.Audited;
@@ -31,7 +32,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class License extends AuditableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

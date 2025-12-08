@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import net.fina.first.model.base.AuditableEntity;
 import net.fina.first.model.enums.ActionStatus;
 import net.fina.first.model.enums.ActionType;
@@ -36,7 +37,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class FiRegistryAction extends AuditableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

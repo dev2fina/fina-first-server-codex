@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import net.fina.first.model.base.BaseEntity;
 import net.fina.first.model.enums.FiTypeCode;
 import org.hibernate.envers.Audited;
@@ -36,7 +37,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class FiType extends BaseEntity {
 
     @NotNull(message = "FI type code is required")

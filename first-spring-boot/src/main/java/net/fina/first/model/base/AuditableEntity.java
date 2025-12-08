@@ -2,9 +2,14 @@ package net.fina.first.model.base;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
+
+import java.time.LocalDateTime;
 
 /**
  * Auditable entity with Hibernate Envers support for full audit trail.
@@ -13,13 +18,16 @@ import org.hibernate.envers.Audited;
 @Audited
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 public abstract class AuditableEntity extends BaseEntity {
 
     @Column(name = "is_deleted")
     private boolean deleted = false;
 
     @Column(name = "deleted_at")
-    private java.time.LocalDateTime deletedAt;
+    private LocalDateTime deletedAt;
 
     @Column(name = "deleted_by")
     private String deletedBy;
@@ -31,7 +39,7 @@ public abstract class AuditableEntity extends BaseEntity {
      */
     public void markAsDeleted(String deletedBy) {
         this.deleted = true;
-        this.deletedAt = java.time.LocalDateTime.now();
+        this.deletedAt = LocalDateTime.now();
         this.deletedBy = deletedBy;
     }
 }
