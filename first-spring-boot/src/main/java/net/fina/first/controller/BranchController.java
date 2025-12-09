@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/fi-registries/{fiRegistryId}/branches")
+@RequestMapping("/v1/fi-registries/{fiRegistryId}/branches")
 @RequiredArgsConstructor
 @Tag(name = "Branches", description = "FI Registry Branch management endpoints")
 public class BranchController {

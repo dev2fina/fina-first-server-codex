@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import net.fina.first.model.base.BaseEntity;
 import org.hibernate.envers.Audited;
 
@@ -24,7 +25,7 @@ import org.hibernate.envers.Audited;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class LegalForm extends BaseEntity {
 
     @NotBlank(message = "Legal form code is required")

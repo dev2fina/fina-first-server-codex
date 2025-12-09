@@ -7,6 +7,7 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
@@ -52,16 +53,32 @@ public interface BeneficiaryMapper {
     @Mapping(target = "deletedBy", ignore = true)
     void updateEntity(BeneficiaryRequest request, @MappingTarget Beneficiary entity);
 
+    @Named("toResponse")
     @Mapping(target = "fiRegistryId", source = "fiRegistry.id")
     @Mapping(target = "parentId", source = "parent.id")
     @Mapping(target = "displayName", expression = "java(entity.getDisplayName())")
     @Mapping(target = "children", ignore = true)
     BeneficiaryResponse toResponse(Beneficiary entity);
 
+    @Named("toResponseWithChildren")
     @Mapping(target = "fiRegistryId", source = "fiRegistry.id")
     @Mapping(target = "parentId", source = "parent.id")
     @Mapping(target = "displayName", expression = "java(entity.getDisplayName())")
     BeneficiaryResponse toResponseWithChildren(Beneficiary entity);
 
-    List<BeneficiaryResponse> toResponseList(List<Beneficiary> entities);
+    @Named("toResponseList")
+    default List<BeneficiaryResponse> toResponseList(List<Beneficiary> entities) {
+        if (entities == null) {
+            return null;
+        }
+        return entities.stream().map(this::toResponse).toList();
+    }
+
+    @Named("toResponseWithChildrenList")
+    default List<BeneficiaryResponse> toResponseWithChildrenList(List<Beneficiary> entities) {
+        if (entities == null) {
+            return null;
+        }
+        return entities.stream().map(this::toResponseWithChildren).toList();
+    }
 }

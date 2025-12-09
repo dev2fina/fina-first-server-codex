@@ -47,5 +47,10 @@ public interface AdministratorMapper {
     @Mapping(target = "fullName", expression = "java(entity.getFullName())")
     AdministratorResponse toResponse(Administrator entity);
 
-    List<AdministratorResponse> toResponseList(List<Administrator> entities);
+    default List<AdministratorResponse> toResponseList(List<Administrator> entities) {
+        if (entities == null) {
+            return null;
+        }
+        return entities.stream().map(this::toResponse).toList();
+    }
 }

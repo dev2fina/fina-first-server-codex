@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/fi-registries/{fiRegistryId}/beneficiaries")
+@RequestMapping("/v1/fi-registries/{fiRegistryId}/beneficiaries")
 @RequiredArgsConstructor
 @Tag(name = "Beneficiaries", description = "FI Registry Beneficiary management endpoints")
 public class BeneficiaryController {

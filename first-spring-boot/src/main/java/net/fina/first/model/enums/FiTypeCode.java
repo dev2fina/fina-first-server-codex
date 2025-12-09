@@ -1,14 +1,12 @@
 package net.fina.first.model.enums;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Enumeration of Financial Institution type codes.
  * Based on the FIRST module documentation defining 14 FI types.
  */
 @Getter
-@RequiredArgsConstructor
 public enum FiTypeCode {
 
     FEX("FEX", "Foreign Exchange Bureau"),
@@ -28,6 +26,11 @@ public enum FiTypeCode {
 
     private final String code;
     private final String description;
+
+    FiTypeCode(String code, String description) {
+        this.code = code;
+        this.description = description;
+    }
 
     public static FiTypeCode fromCode(String code) {
         for (FiTypeCode type : values()) {

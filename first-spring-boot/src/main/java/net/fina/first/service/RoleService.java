@@ -11,6 +11,7 @@ import net.fina.first.model.Permission;
 import net.fina.first.model.Role;
 import net.fina.first.repository.PermissionRepository;
 import net.fina.first.repository.RoleRepository;
+import net.fina.first.repository.UserRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class RoleService {
 
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
+    private final UserRepository userRepository;
     private final RoleMapper roleMapper;
     private final AuditLogService auditLogService;
 
@@ -46,6 +48,16 @@ public class RoleService {
         return roleMapper.toResponse(role);
     }
 
+    public RoleResponse findByCode(String code) {
+        log.debug("Fetching role by code: {}", code);
+        Role role = roleRepository.findByCode(code)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", "code", code));
+        return roleMapper.toResponse(role);
+    }
+
+    /**
+     * Finds role by name.
+     */
     public RoleResponse findByName(String name) {
         log.debug("Fetching role by name: {}", name);
         Role role = roleRepository.findByName(name)
@@ -53,19 +65,31 @@ public class RoleService {
         return roleMapper.toResponse(role);
     }
 
+    /**
+     * Creates a new role with auto-generated code.
+     */
     @Transactional
     @CacheEvict(value = "roles", allEntries = true)
     public RoleResponse create(String name, String description, Set<Long> permissionIds) {
+        String code = generateCodeFromName(name);
+        return create(code, name, description, permissionIds);
+    }
+
+    @Transactional
+    @CacheEvict(value = "roles", allEntries = true)
+    public RoleResponse create(String code, String name, String description, Set<Long> permissionIds) {
         log.info("Creating new role: {}", name);
 
-        if (roleRepository.existsByName(name)) {
-            throw new DuplicateResourceException("Role", "name", name);
+        if (roleRepository.existsByCode(code)) {
+            throw new DuplicateResourceException("Role", "code", code);
         }
 
         Role role = new Role();
+        role.setCode(code);
         role.setName(name);
         role.setDescription(description);
         role.setActive(true);
+        role.setSystem(false);
 
         if (permissionIds != null && !permissionIds.isEmpty()) {
             Set<Permission> permissions = new HashSet<>(permissionRepository.findAllById(permissionIds));
@@ -88,16 +112,13 @@ public class RoleService {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", "id", id));
 
-        if (role.isSystemRole()) {
+        if (role.isSystem()) {
             throw new BusinessException("System roles cannot be modified");
         }
 
         String oldValue = roleMapper.toResponse(role).toString();
 
-        if (name != null && !name.equals(role.getName())) {
-            if (roleRepository.existsByName(name)) {
-                throw new DuplicateResourceException("Role", "name", name);
-            }
+        if (name != null) {
             role.setName(name);
         }
 
@@ -126,11 +147,12 @@ public class RoleService {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", "id", id));
 
-        if (role.isSystemRole()) {
+        if (role.isSystem()) {
             throw new BusinessException("System roles cannot be deleted");
         }
 
-        if (!role.getUsers().isEmpty()) {
+        // Check if any users have this role
+        if (userRepository.existsByRolesId(id)) {
             throw new BusinessException("Cannot delete role assigned to users");
         }
 
@@ -167,5 +189,9 @@ public class RoleService {
 
         Role savedRole = roleRepository.save(role);
         return roleMapper.toResponse(savedRole);
+    }
+
+    private String generateCodeFromName(String name) {
+        return "ROLE_" + name.toUpperCase().replaceAll("[^A-Z0-9]", "_");
     }
 }

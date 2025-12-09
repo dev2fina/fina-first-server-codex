@@ -40,8 +40,7 @@ public class AlfrescoClientService {
     }
 
     private RestTemplate createRestTemplate() {
-        RestTemplate template = new RestTemplate();
-        return template;
+        return new RestTemplate();
     }
 
     public NodeMetaModel getNode(String nodeId) {

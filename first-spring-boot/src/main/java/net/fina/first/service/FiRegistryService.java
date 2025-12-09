@@ -14,7 +14,9 @@ import net.fina.first.model.FiRegistry;
 import net.fina.first.model.FiType;
 import net.fina.first.model.LegalForm;
 import net.fina.first.model.Region;
+import net.fina.first.model.enums.FiTypeCode;
 import net.fina.first.model.enums.RegistrationStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import net.fina.first.repository.FiRegistryRepository;
 import net.fina.first.repository.FiTypeRepository;
 import net.fina.first.repository.LegalFormRepository;
@@ -48,6 +50,31 @@ public class FiRegistryService {
     public PageResponse<FiRegistryResponse> findAll(Pageable pageable) {
         log.debug("Finding all FI registries with pagination: {}", pageable);
         Page<FiRegistry> page = fiRegistryRepository.findAllActive(pageable);
+        return PageResponse.of(page, fiRegistryMapper.toResponseList(page.getContent()));
+    }
+
+    /**
+     * Retrieves all FI registries with filtering and pagination.
+     */
+    public PageResponse<FiRegistryResponse> findAll(String search, FiTypeCode fiTypeCode,
+                                                     RegistrationStatus status, Pageable pageable) {
+        log.debug("Finding FI registries with filters - search: {}, fiTypeCode: {}, status: {}",
+                search, fiTypeCode, status);
+
+        Page<FiRegistry> page;
+
+        if (search != null && !search.isBlank()) {
+            page = fiRegistryRepository.searchByTerm(search, pageable);
+        } else if (fiTypeCode != null && status != null) {
+            page = fiRegistryRepository.findByFiTypeCodeAndStatus(fiTypeCode, status, pageable);
+        } else if (fiTypeCode != null) {
+            page = fiRegistryRepository.findByFiTypeCode(fiTypeCode, pageable);
+        } else if (status != null) {
+            page = fiRegistryRepository.findByStatus(status, pageable);
+        } else {
+            page = fiRegistryRepository.findAllActive(pageable);
+        }
+
         return PageResponse.of(page, fiRegistryMapper.toResponseList(page.getContent()));
     }
 
@@ -176,7 +203,15 @@ public class FiRegistryService {
      */
     @Transactional
     public FiRegistryResponse approve(Long id) {
-        log.info("Approving FI registry with ID: {}", id);
+        return approve(id, null);
+    }
+
+    /**
+     * Approves an FI registry with optional comment.
+     */
+    @Transactional
+    public FiRegistryResponse approve(Long id, String comment) {
+        log.info("Approving FI registry with ID: {}, comment: {}", id, comment);
 
         FiRegistry fiRegistry = findEntityById(id);
 
@@ -212,6 +247,15 @@ public class FiRegistryService {
 
         log.info("FI registry {} rejected", saved.getCode());
         return fiRegistryMapper.toResponse(saved);
+    }
+
+    /**
+     * Soft deletes an FI registry using current user.
+     */
+    @Transactional
+    public void delete(Long id) {
+        String deletedBy = getCurrentUsername();
+        delete(id, deletedBy);
     }
 
     /**
@@ -289,5 +333,10 @@ public class FiRegistryService {
         if (fiRegistry.getEmail() == null || fiRegistry.getEmail().isBlank()) {
             throw new BusinessException("Email is required for submission");
         }
+    }
+
+    private String getCurrentUsername() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null ? authentication.getName() : "system";
     }
 }

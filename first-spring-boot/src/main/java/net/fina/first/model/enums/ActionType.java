@@ -1,14 +1,12 @@
 package net.fina.first.model.enums;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Types of workflow actions on FI Registry.
  * Corresponds to legacy FiRegistryActionType.
  */
 @Getter
-@RequiredArgsConstructor
 public enum ActionType {
 
     REGISTRATION("Registration", "New FI registration process"),
@@ -23,4 +21,9 @@ public enum ActionType {
 
     private final String displayName;
     private final String description;
+
+    ActionType(String displayName, String description) {
+        this.displayName = displayName;
+        this.description = description;
+    }
 }

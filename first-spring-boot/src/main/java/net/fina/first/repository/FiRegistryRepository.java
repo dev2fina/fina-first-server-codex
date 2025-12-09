@@ -41,6 +41,12 @@ public interface FiRegistryRepository extends JpaRepository<FiRegistry, Long>, J
     @Query("SELECT f FROM FiRegistry f WHERE f.status = :status AND f.deleted = false")
     Page<FiRegistry> findByStatus(@Param("status") RegistrationStatus status, Pageable pageable);
 
+    @Query("SELECT f FROM FiRegistry f WHERE f.fiType.code = :fiTypeCode AND f.status = :status AND f.deleted = false")
+    Page<FiRegistry> findByFiTypeCodeAndStatus(
+            @Param("fiTypeCode") FiTypeCode fiTypeCode,
+            @Param("status") RegistrationStatus status,
+            Pageable pageable);
+
     @Query("SELECT f FROM FiRegistry f WHERE f.licenseStatus = :licenseStatus AND f.deleted = false")
     Page<FiRegistry> findByLicenseStatus(@Param("licenseStatus") LicenseStatus licenseStatus, Pageable pageable);
 

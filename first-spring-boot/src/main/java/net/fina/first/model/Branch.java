@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import net.fina.first.model.base.AuditableEntity;
 import net.fina.first.model.enums.BranchStatus;
 import org.hibernate.envers.Audited;
@@ -32,7 +33,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Branch extends AuditableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -93,6 +94,13 @@ public class Branch extends AuditableEntity {
 
     @Column(name = "cancellation_date")
     private LocalDate cancellationDate;
+
+    @Column(name = "cancellation_reason", length = 1000)
+    private String cancellationReason;
+
+    @Column(name = "is_head_office")
+    @Builder.Default
+    private boolean headOffice = false;
 
     // === Legal Act ===
 

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/fi-registries/{fiRegistryId}/licenses")
+@RequestMapping("/v1/fi-registries/{fiRegistryId}/licenses")
 @RequiredArgsConstructor
 @Tag(name = "Licenses", description = "FI Registry License management endpoints")
 public class LicenseController {

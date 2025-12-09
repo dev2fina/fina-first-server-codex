@@ -13,7 +13,8 @@ public class AccessDeniedException extends RuntimeException {
         super(message, cause);
     }
 
-    public AccessDeniedException(String requiredPermission) {
-        super(String.format("Access denied. Required permission: %s", requiredPermission));
+    public static AccessDeniedException forPermission(String requiredPermission) {
+        return new AccessDeniedException(
+                String.format("Access denied. Required permission: %s", requiredPermission));
     }
 }

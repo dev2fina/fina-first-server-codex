@@ -2,6 +2,9 @@ package net.fina.first.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -10,12 +13,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import net.fina.first.model.base.BaseEntity;
 import org.hibernate.envers.Audited;
 
 /**
  * License Type catalog entity.
  * Defines the various types of licenses that can be issued.
+ * Each license type belongs to a specific FI type.
  */
 @Entity
 @Table(name = "first_license_types")
@@ -24,8 +29,12 @@ import org.hibernate.envers.Audited;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class LicenseType extends BaseEntity {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fi_type_id")
+    private FiType fiType;
 
     @NotBlank(message = "License type code is required")
     @Size(max = 50)

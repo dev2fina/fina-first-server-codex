@@ -18,6 +18,7 @@ import net.fina.first.repository.LicenseRepository;
 import net.fina.first.repository.LicenseTypeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +55,29 @@ public class LicenseService {
         log.debug("Finding licenses for FI registry ID: {} with pagination", fiRegistryId);
         Page<License> page = licenseRepository.findByFiRegistryId(fiRegistryId, pageable);
         return PageResponse.of(page, licenseMapper.toResponseList(page.getContent()));
+    }
+
+    /**
+     * Retrieves licenses with optional status filter and pagination.
+     */
+    public PageResponse<LicenseResponse> findByFiRegistry(Long fiRegistryId, LicenseStatus status, Pageable pageable) {
+        log.debug("Finding licenses for FI registry ID: {} with status: {}", fiRegistryId, status);
+        Page<License> page;
+        if (status != null) {
+            page = licenseRepository.findByFiRegistryIdAndStatus(fiRegistryId, status, pageable);
+        } else {
+            page = licenseRepository.findByFiRegistryIdActive(fiRegistryId, pageable);
+        }
+        return PageResponse.of(page, licenseMapper.toResponseList(page.getContent()));
+    }
+
+    /**
+     * Retrieves all active licenses for an FI registry.
+     */
+    public List<LicenseResponse> findActiveLicenses(Long fiRegistryId) {
+        log.debug("Finding active licenses for FI registry ID: {}", fiRegistryId);
+        List<License> licenses = licenseRepository.findByFiRegistryIdAndStatus(fiRegistryId, LicenseStatus.ACTIVE);
+        return licenseMapper.toResponseList(licenses);
     }
 
     /**
@@ -238,6 +262,15 @@ public class LicenseService {
     }
 
     /**
+     * Soft deletes a license using current user.
+     */
+    @Transactional
+    public void delete(Long id) {
+        String deletedBy = getCurrentUsername();
+        delete(id, deletedBy);
+    }
+
+    /**
      * Soft deletes a license.
      */
     @Transactional
@@ -268,5 +301,10 @@ public class LicenseService {
         return fiRegistryRepository.findById(id)
                 .filter(fi -> !fi.isDeleted())
                 .orElseThrow(() -> new ResourceNotFoundException("FiRegistry", "id", id));
+    }
+
+    private String getCurrentUsername() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null ? authentication.getName() : "system";
     }
 }

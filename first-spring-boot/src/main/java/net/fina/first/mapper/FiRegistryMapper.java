@@ -70,11 +70,17 @@ public interface FiRegistryMapper {
     @Mapping(target = "deletedBy", ignore = true)
     void updateEntity(FiRegistryUpdateRequest request, @MappingTarget FiRegistry entity);
 
+    @Mapping(target = "legalAddressRegion", source = "legalAddressRegion", qualifiedByName = "toResponse")
     @Mapping(target = "branchCount", expression = "java(entity.getBranches() != null ? entity.getBranches().size() : 0)")
     @Mapping(target = "administratorCount", expression = "java(entity.getAdministrators() != null ? entity.getAdministrators().size() : 0)")
     @Mapping(target = "beneficiaryCount", expression = "java(entity.getBeneficiaries() != null ? entity.getBeneficiaries().size() : 0)")
     @Mapping(target = "licenseCount", expression = "java(entity.getLicenses() != null ? entity.getLicenses().size() : 0)")
     FiRegistryResponse toResponse(FiRegistry entity);
 
-    List<FiRegistryResponse> toResponseList(List<FiRegistry> entities);
+    default List<FiRegistryResponse> toResponseList(List<FiRegistry> entities) {
+        if (entities == null) {
+            return null;
+        }
+        return entities.stream().map(this::toResponse).toList();
+    }
 }

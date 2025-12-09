@@ -15,9 +15,12 @@ import net.fina.first.repository.AdministratorRepository;
 import net.fina.first.repository.FiRegistryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -39,6 +42,33 @@ public class AdministratorService {
     public List<AdministratorResponse> findByFiRegistryId(Long fiRegistryId) {
         log.debug("Finding administrators for FI registry ID: {}", fiRegistryId);
         List<Administrator> administrators = administratorRepository.findActiveByFiRegistryId(fiRegistryId);
+        return administratorMapper.toResponseList(administrators);
+    }
+
+    /**
+     * Retrieves administrators with filters and pagination - for controller use.
+     */
+    public PageResponse<AdministratorResponse> findByFiRegistry(Long fiRegistryId, Boolean activeOnly,
+                                                                  String search, Pageable pageable) {
+        log.debug("Finding administrators for FI registry ID: {} with activeOnly: {} and search: {}",
+                fiRegistryId, activeOnly, search);
+
+        Page<Administrator> page;
+        if (Boolean.TRUE.equals(activeOnly)) {
+            page = administratorRepository.findCurrentByFiRegistryId(fiRegistryId, pageable);
+        } else {
+            page = administratorRepository.findByFiRegistryId(fiRegistryId, pageable);
+        }
+
+        return PageResponse.of(page, administratorMapper.toResponseList(page.getContent()));
+    }
+
+    /**
+     * Retrieves active administrators for an FI registry.
+     */
+    public List<AdministratorResponse> findActiveAdministrators(Long fiRegistryId) {
+        log.debug("Finding active administrators for FI registry ID: {}", fiRegistryId);
+        List<Administrator> administrators = administratorRepository.findCurrentByFiRegistryId(fiRegistryId);
         return administratorMapper.toResponseList(administrators);
     }
 
@@ -124,15 +154,18 @@ public class AdministratorService {
     }
 
     /**
-     * Terminates an administrator.
+     * Terminates an administrator with optional reason.
      */
     @Transactional
-    public AdministratorResponse terminate(Long id, java.time.LocalDate terminationDate) {
-        log.info("Terminating administrator with ID: {}", id);
+    public AdministratorResponse terminate(Long id, String reason) {
+        log.info("Terminating administrator with ID: {}, reason: {}", id, reason);
 
         Administrator administrator = findEntityById(id);
         administrator.setActive(false);
-        administrator.setTerminationDate(terminationDate != null ? terminationDate : java.time.LocalDate.now());
+        administrator.setTerminationDate(LocalDate.now());
+        if (reason != null) {
+            administrator.setTerminationReason(reason);
+        }
 
         Administrator saved = administratorRepository.save(administrator);
         log.info("Administrator {} terminated", saved.getFullName());
@@ -144,11 +177,11 @@ public class AdministratorService {
      * Soft deletes an administrator.
      */
     @Transactional
-    public void delete(Long id, String deletedBy) {
+    public void delete(Long id) {
         log.info("Deleting administrator with ID: {}", id);
 
         Administrator administrator = findEntityById(id);
-        administrator.markAsDeleted(deletedBy);
+        administrator.markAsDeleted(getCurrentUsername());
         administratorRepository.save(administrator);
 
         log.info("Administrator {} soft deleted", administrator.getFullName());
@@ -166,5 +199,13 @@ public class AdministratorService {
         return fiRegistryRepository.findById(id)
                 .filter(fi -> !fi.isDeleted())
                 .orElseThrow(() -> new ResourceNotFoundException("FiRegistry", "id", id));
+    }
+
+    private String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return authentication.getName();
+        }
+        return "system";
     }
 }

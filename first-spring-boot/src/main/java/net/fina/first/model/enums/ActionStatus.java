@@ -1,13 +1,11 @@
 package net.fina.first.model.enums;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Status of workflow actions.
  */
 @Getter
-@RequiredArgsConstructor
 public enum ActionStatus {
 
     INITIATED("Initiated", "Action has been initiated"),
@@ -20,4 +18,9 @@ public enum ActionStatus {
 
     private final String displayName;
     private final String description;
+
+    ActionStatus(String displayName, String description) {
+        this.displayName = displayName;
+        this.description = description;
+    }
 }

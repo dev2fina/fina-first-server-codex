@@ -23,7 +23,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/fi-registries/{fiRegistryId}/documents")
+@RequestMapping("/v1/fi-registries/{fiRegistryId}/documents")
 @RequiredArgsConstructor
 @Tag(name = "Documents", description = "Document management endpoints with Alfresco ECM integration")
 @ConditionalOnProperty(name = "ecm.alfresco.enabled", havingValue = "true", matchIfMissing = true)

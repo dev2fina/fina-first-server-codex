@@ -22,9 +22,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByLoginWithRolesAndPermissions(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
-                        "User not found with username: " + username));
+                        "User not found with login: " + username));
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
@@ -38,11 +38,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         });
 
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
+                user.getLogin(),
                 user.getPassword(),
-                user.isActive(),
+                !user.isDisabled(),
                 true,
-                !user.isCredentialsExpired(),
+                !user.isChangePassword(),
                 !user.isAccountLocked(),
                 authorities);
     }

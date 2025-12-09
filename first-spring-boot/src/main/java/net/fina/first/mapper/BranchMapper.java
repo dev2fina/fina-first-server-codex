@@ -50,7 +50,13 @@ public interface BranchMapper {
     void updateEntity(BranchRequest request, @MappingTarget Branch entity);
 
     @Mapping(target = "fiRegistryId", source = "fiRegistry.id")
+    @Mapping(target = "region", source = "region", qualifiedByName = "toResponse")
     BranchResponse toResponse(Branch entity);
 
-    List<BranchResponse> toResponseList(List<Branch> entities);
+    default List<BranchResponse> toResponseList(List<Branch> entities) {
+        if (entities == null) {
+            return null;
+        }
+        return entities.stream().map(this::toResponse).toList();
+    }
 }

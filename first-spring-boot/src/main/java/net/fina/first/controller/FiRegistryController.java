@@ -22,7 +22,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/fi-registries")
+@RequestMapping("/v1/fi-registries")
 @RequiredArgsConstructor
 @Tag(name = "FI Registry", description = "Financial Institution Registry management endpoints")
 public class FiRegistryController {

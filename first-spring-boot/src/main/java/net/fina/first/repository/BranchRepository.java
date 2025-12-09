@@ -33,6 +33,15 @@ public interface BranchRepository extends JpaRepository<Branch, Long>, JpaSpecif
             @Param("fiRegistryId") Long fiRegistryId,
             @Param("status") BranchStatus status);
 
+    @Query("SELECT b FROM Branch b WHERE b.fiRegistry.id = :fiRegistryId AND b.status = :status AND b.deleted = false")
+    Page<Branch> findByFiRegistryIdAndStatus(
+            @Param("fiRegistryId") Long fiRegistryId,
+            @Param("status") BranchStatus status,
+            Pageable pageable);
+
+    @Query("SELECT b FROM Branch b WHERE b.fiRegistry.id = :fiRegistryId AND b.headOffice = true AND b.deleted = false")
+    Optional<Branch> findHeadOfficeByFiRegistryId(@Param("fiRegistryId") Long fiRegistryId);
+
     @Query("SELECT b FROM Branch b WHERE b.region.id = :regionId AND b.deleted = false")
     List<Branch> findByRegionId(@Param("regionId") Long regionId);
 

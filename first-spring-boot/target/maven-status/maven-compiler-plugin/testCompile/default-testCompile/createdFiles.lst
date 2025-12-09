@@ -1,0 +1,7 @@
+net\fina\first\service\FiRegistryServiceTest$CreateTests.class
+net\fina\first\controller\FiRegistryControllerTest.class
+net\fina\first\service\FiRegistryServiceTest$WorkflowTests.class
+net\fina\first\service\FiRegistryServiceTest$FindByIdTests.class
+net\fina\first\service\FiRegistryServiceTest.class
+net\fina\first\FirstApplicationTests.class
+net\fina\first\service\FiRegistryServiceTest$FindAllTests.class

@@ -1,13 +1,11 @@
 package net.fina.first.model.enums;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * License status for Financial Institutions.
  */
 @Getter
-@RequiredArgsConstructor
 public enum LicenseStatus {
 
     ACTIVE("Active", "License is currently active"),
@@ -19,4 +17,9 @@ public enum LicenseStatus {
 
     private final String displayName;
     private final String description;
+
+    LicenseStatus(String displayName, String description) {
+        this.displayName = displayName;
+        this.description = description;
+    }
 }

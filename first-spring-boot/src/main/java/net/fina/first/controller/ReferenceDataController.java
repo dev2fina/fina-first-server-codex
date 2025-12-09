@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/reference-data")
+@RequestMapping("/v1/reference-data")
 @RequiredArgsConstructor
 @Tag(name = "Reference Data", description = "Reference data lookup endpoints")
 public class ReferenceDataController {

@@ -79,4 +79,21 @@ public class PageResponse<T> {
                 .hasPrevious(page.hasPrevious())
                 .build();
     }
+
+    /**
+     * Creates an empty PageResponse.
+     */
+    public static <T> PageResponse<T> empty() {
+        return PageResponse.<T>builder()
+                .content(List.of())
+                .page(0)
+                .size(0)
+                .totalElements(0)
+                .totalPages(0)
+                .first(true)
+                .last(true)
+                .hasNext(false)
+                .hasPrevious(false)
+                .build();
+    }
 }
