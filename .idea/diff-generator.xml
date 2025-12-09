@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DiffGenerationConfig">
+    <option name="snapshotDbValue" value="5589525b-c424-4a89-a4b7-61b13d384ec0" />
+    <option name="snapshotDirValue" value="$PROJECT_DIR$/first-spring-boot" />
+    <option name="sourceModelValue" value="first-spring-boot:first-spring-boot" />
+    <option name="targetDbValue" value="5589525b-c424-4a89-a4b7-61b13d384ec0" />
+  </component>
+</project>

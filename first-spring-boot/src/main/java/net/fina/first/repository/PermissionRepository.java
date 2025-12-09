@@ -27,4 +27,6 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
     @Query("SELECT DISTINCT p.module FROM Permission p WHERE p.active = true ORDER BY p.module")
     List<String> findAllModules();
+
+    Optional<Permission> findByName(String name);
 }

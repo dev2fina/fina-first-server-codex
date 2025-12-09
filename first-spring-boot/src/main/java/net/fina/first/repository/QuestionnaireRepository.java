@@ -1,5 +1,6 @@
 package net.fina.first.repository;
 
+import net.fina.first.model.FiType;
 import net.fina.first.model.Questionnaire;
 import net.fina.first.model.enums.FiTypeCode;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,4 +33,7 @@ public interface QuestionnaireRepository extends JpaRepository<Questionnaire, Lo
 
     @Query("SELECT DISTINCT q.groupCode FROM Questionnaire q WHERE q.active = true ORDER BY q.groupCode")
     List<String> findAllGroups();
+
+    @Query("SELECT q FROM Questionnaire q WHERE q.fiType = :fiType AND q.active = true ORDER BY q.groupCode, q.sequence")
+    List<Questionnaire> findByFiTypeAndActiveTrue(FiType fiType);
 }
