@@ -1,0 +1,52 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="BulkFilesystemImportStatus">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="xs:string" name="CurrentStatus"/>
+                <xs:element type="xs:string" name="ResultOfLastExecution"/>
+                <xs:element type="xs:string" name="SourceDirectory"/>
+                <xs:element type="xs:string" name="TargetSpace"/>
+                <xs:element type="xs:dateTime" name="StartDate"/>
+                <xs:element type="xs:dateTime" name="EndDate"/>
+                <xs:element type="xs:int" name="DurationInNS"/>
+                <xs:element type="xs:byte" name="CompletedBatches"/>
+                <xs:element name="SourceStatistics">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:string" name="LastFileOrFolderProcessed"/>
+                            <xs:element type="xs:byte" name="FilesScanned"/>
+                            <xs:element type="xs:byte" name="FoldersScanned"/>
+                            <xs:element type="xs:byte" name="UnreadableEntries"/>
+                            <xs:element type="xs:byte" name="ContentFilesRead"/>
+                            <xs:element type="xs:int" name="ContentBytesRead"/>
+                            <xs:element type="xs:byte" name="MetadataFilesRead"/>
+                            <xs:element type="xs:byte" name="MetadataBytesRead"/>
+                            <xs:element type="xs:byte" name="ContentVersionFilesRead"/>
+                            <xs:element type="xs:byte" name="ContentVersionBytesRead"/>
+                            <xs:element type="xs:byte" name="MetadataVersionFilesRead"/>
+                            <xs:element type="xs:byte" name="MetadataVersionBytesRead"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="TargetStatistics">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:byte" name="SpaceNodesCreated"/>
+                            <xs:element type="xs:byte" name="SpaceNodesReplaced"/>
+                            <xs:element type="xs:byte" name="SpaceNodesSkipped"/>
+                            <xs:element type="xs:byte" name="SpacePropertiesWritten"/>
+                            <xs:element type="xs:byte" name="ContentNodesCreated"/>
+                            <xs:element type="xs:byte" name="ContentNodesReplaced"/>
+                            <xs:element type="xs:byte" name="ContentNodesSkipped"/>
+                            <xs:element type="xs:int" name="ContentBytesWritten"/>
+                            <xs:element type="xs:short" name="ContentPropertiesWritten"/>
+                            <xs:element type="xs:byte" name="ContentVersionsCreated"/>
+                            <xs:element type="xs:byte" name="ContentVersionsBytesWritten"/>
+                            <xs:element type="xs:byte" name="ContentVersionsPropertiesWritten"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
