@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/fi-registries/{fiRegistryId}/administrators")
+@RequestMapping("/v1/fi-registries/{fiRegistryId}/administrators")
 @RequiredArgsConstructor
 @Tag(name = "Administrators", description = "FI Registry Administrator management endpoints")
 public class AdministratorController {

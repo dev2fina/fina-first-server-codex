@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/v1/roles")
+@RequestMapping("/v1/roles")
 @RequiredArgsConstructor
 @Tag(name = "Roles", description = "Role management endpoints")
 public class RoleController {

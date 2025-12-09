@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api/v1/audit-logs")
+@RequestMapping("/v1/audit-logs")
 @RequiredArgsConstructor
 @Tag(name = "Audit Logs", description = "Audit log viewing endpoints")
 public class AuditLogController {
