@@ -21,13 +21,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import net.fina.first.model.base.AuditableEntity;
+import net.fina.first.model.enums.ControllerDecision;
 import net.fina.first.model.enums.LicenseStatus;
 import net.fina.first.model.enums.RegistrationStatus;
+import net.fina.first.model.enums.WorkflowPhase;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -229,6 +232,72 @@ public class FiRegistry extends AuditableEntity {
     @Column(name = "ecm_folder_id", length = 100)
     private String ecmFolderId;
 
+    // === Workflow Phase Tracking ===
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "current_phase", length = 30)
+    @Builder.Default
+    private WorkflowPhase currentPhase = WorkflowPhase.PHASE1_INITIAL;
+
+    @Column(name = "phase1_completed_at")
+    private LocalDateTime phase1CompletedAt;
+
+    @Column(name = "phase2_completed_at")
+    private LocalDateTime phase2CompletedAt;
+
+    @Column(name = "data_entry_completed_at")
+    private LocalDateTime dataEntryCompletedAt;
+
+    @Column(name = "questionnaire_completed_at")
+    private LocalDateTime questionnaireCompletedAt;
+
+    // === Controller Review Tracking ===
+
+    @Column(name = "submitted_to_controller_at")
+    private LocalDateTime submittedToControllerAt;
+
+    @Column(name = "submitted_to_controller_by", length = 100)
+    private String submittedToControllerBy;
+
+    @Column(name = "assigned_controller", length = 100)
+    private String assignedController;
+
+    @Column(name = "controller_reviewed_at")
+    private LocalDateTime controllerReviewedAt;
+
+    @Column(name = "controller_reviewed_by", length = 100)
+    private String controllerReviewedBy;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "controller_decision", length = 20)
+    private ControllerDecision controllerDecision;
+
+    @Column(name = "controller_decision_comment", length = 2000)
+    private String controllerDecisionComment;
+
+    // === Correction Tracking ===
+
+    @Column(name = "correction_requested_at")
+    private LocalDateTime correctionRequestedAt;
+
+    @Column(name = "correction_reason", length = 2000)
+    private String correctionReason;
+
+    @Column(name = "correction_deadline")
+    private LocalDate correctionDeadline;
+
+    @Column(name = "correction_count")
+    @Builder.Default
+    private Integer correctionCount = 0;
+
+    // === Final Registration ===
+
+    @Column(name = "registered_at")
+    private LocalDateTime registeredAt;
+
+    @Column(name = "registered_by", length = 100)
+    private String registeredBy;
+
     // === Relationships ===
 
     @OneToMany(mappedBy = "fiRegistry", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -309,5 +378,89 @@ public class FiRegistry extends AuditableEntity {
     public void removeAction(FiRegistryAction action) {
         actions.remove(action);
         action.setFiRegistry(null);
+    }
+
+    // === Workflow Helper Methods ===
+
+    /**
+     * Check if the FI type requires license information (PSP or VASP).
+     */
+    public boolean requiresLicense() {
+        if (fiType == null || fiType.getCode() == null) {
+            return false;
+        }
+        String code = fiType.getCode().name();
+        return "PSP".equals(code) || "VASP".equals(code);
+    }
+
+    /**
+     * Check if the registration is in a phase that allows FI editing.
+     */
+    public boolean isEditableByFi() {
+        return currentPhase != null && currentPhase.isFiEditable();
+    }
+
+    /**
+     * Check if the registration requires controller action.
+     */
+    public boolean requiresControllerAction() {
+        return currentPhase != null && currentPhase.requiresControllerAction();
+    }
+
+    /**
+     * Check if the registration is complete.
+     */
+    public boolean isRegistered() {
+        return currentPhase == WorkflowPhase.PHASE9_REGISTERED;
+    }
+
+    /**
+     * Check if there's an active head office branch.
+     */
+    public boolean hasHeadOfficeBranch() {
+        return branches != null && branches.stream()
+                .anyMatch(b -> b.isHeadOffice() && !b.isDeleted());
+    }
+
+    /**
+     * Get count of active administrators.
+     */
+    public long getActiveAdministratorCount() {
+        if (administrators == null) return 0;
+        return administrators.stream()
+                .filter(a -> !a.isDeleted())
+                .count();
+    }
+
+    /**
+     * Get count of active beneficiaries.
+     */
+    public long getActiveBeneficiaryCount() {
+        if (beneficiaries == null) return 0;
+        return beneficiaries.stream()
+                .filter(b -> !b.isDeleted())
+                .count();
+    }
+
+    /**
+     * Get count of active licenses.
+     */
+    public long getActiveLicenseCount() {
+        if (licenses == null) return 0;
+        return licenses.stream()
+                .filter(l -> !l.isDeleted())
+                .count();
+    }
+
+    /**
+     * Advance to the next workflow phase.
+     */
+    public void advanceToNextPhase() {
+        if (currentPhase != null && !currentPhase.isTerminal()) {
+            WorkflowPhase nextPhase = currentPhase.getNextPhase();
+            if (nextPhase != null) {
+                this.currentPhase = nextPhase;
+            }
+        }
     }
 }
