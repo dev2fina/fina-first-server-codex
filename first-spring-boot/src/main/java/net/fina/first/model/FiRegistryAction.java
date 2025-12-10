@@ -59,7 +59,7 @@ public class FiRegistryAction extends AuditableEntity {
     @Column(name = "author", length = 255)
     private String author;
 
-    @Column(name = "identity", length = 100)
+    @Column(name = "action_identity", length = 100)
     private String identity;
 
     @Column(name = "process_id", length = 100)
