@@ -42,7 +42,14 @@ public class SecurityConfig {
             "/swagger-ui.html",
             "/actuator/health",
             "/actuator/info",
-            "/v1/users/"
+            "/v1/users/",
+            // Static resources
+            "/static/**",
+            "/login.html",
+            "/workflow-test.html",
+            "/*.html",
+            "/*.css",
+            "/*.js"
     };
 
     @Bean
