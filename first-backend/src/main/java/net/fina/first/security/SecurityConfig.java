@@ -39,6 +39,7 @@ public class SecurityConfig {
                                 "/questionnaire.html",
                                 "/review.html",
                                 "/common.js",
+                                "/styles.css",
                                 "/static/**",
                                 "/webjars/**")
                         .permitAll()

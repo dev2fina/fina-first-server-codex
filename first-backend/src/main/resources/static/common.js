@@ -57,7 +57,7 @@ function showMessage(elementId, message, isError = false) {
     const el = document.getElementById(elementId);
     if (el) {
         el.textContent = message;
-        el.style.color = isError ? 'red' : 'green';
+        el.className = isError ? 'status error' : 'status';
     }
 }
 
@@ -65,6 +65,7 @@ function renderStatus(data, targetId = 'status') {
     const el = document.getElementById(targetId);
     if (!el || !data) return;
     el.textContent = `Status: ${data.status || 'n/a'} | FI ID: ${data.id || 'n/a'} | Name: ${data.legalName || ''}`;
+    el.className = 'status';
 }
 
 function populateFiLink(id) {
