@@ -1,0 +1,15 @@
+package net.fina.first.model.registry;
+
+public enum RegistrationStatus {
+    DRAFT_PHASE1,
+    SUBMITTED_PHASE1,
+    PHASE1_IN_REVIEW,
+    PHASE1_CORRECTION_REQUIRED,
+    PHASE1_APPROVED,
+    DRAFT_PHASE2,
+    SUBMITTED_PHASE2,
+    UNDER_REVIEW,
+    CORRECTION_REQUIRED,
+    APPROVED,
+    DECLINED
+}

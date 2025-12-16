@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Review & Decisions</title>
+    <script src="/common.js"></script>
+</head>
+<body>
+<h1>Controller Review</h1>
+<div><a href="/index.html">Back</a></div>
+<div id="currentFi"></div>
+
+<section>
+    <h2>Submit to Controller</h2>
+    <label>Submitted By <input id="submittedBy" value="admin"></label>
+    <button id="submitPhase1">Submit Phase 1</button>
+    <button id="submitPhase2">Submit Phase 2</button>
+</section>
+
+<section>
+    <h2>Phase 1 Review</h2>
+    <label>Controller <input id="reviewer" value="controller"></label>
+    <label>Comment <input id="reviewComment" size="60"></label>
+    <button id="acceptPhase1">Accept Phase 1</button>
+    <button id="declinePhase1">Request Phase 1 Correction</button>
+</section>
+
+<section>
+    <h2>Final Decision</h2>
+    <label>Controller <input id="controller" value="controller"></label>
+    <label>Comment <input id="decisionComment" size="60"></label>
+    <button id="approve">Approve Registration</button>
+    <button id="decline">Decline Registration</button>
+</section>
+
+<div id="reviewStatus"></div>
+
+<script>
+function getFiOrWarn() {
+    const fiId = getFiId();
+    if (!fiId) {
+        showMessage('reviewStatus', 'No FI selected.', true);
+        throw new Error('No FI');
+    }
+    return fiId;
+}
+
+document.getElementById('submitPhase1').onclick = async () => {
+    try {
+        const fiId = getFiOrWarn();
+        const data = await apiFetch(`/api/registry/${fiId}/submit-phase1`, {
+            method: 'POST',
+            body: JSON.stringify({ submittedBy: document.getElementById('submittedBy').value })
+        });
+        renderStatus(data, 'currentFi');
+        showMessage('reviewStatus', 'Phase 1 submitted.');
+    } catch (err) {
+        if (err.message === 'No FI') return;
+        showMessage('reviewStatus', 'Submit failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+document.getElementById('submitPhase2').onclick = async () => {
+    try {
+        const fiId = getFiOrWarn();
+        const data = await apiFetch(`/api/registry/${fiId}/submit-phase2`, {
+            method: 'POST',
+            body: JSON.stringify({ submittedBy: document.getElementById('submittedBy').value })
+        });
+        renderStatus(data, 'currentFi');
+        showMessage('reviewStatus', 'Phase 2 submitted.');
+    } catch (err) {
+        if (err.message === 'No FI') return;
+        showMessage('reviewStatus', 'Submit failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+document.getElementById('acceptPhase1').onclick = async () => {
+    try {
+        const fiId = getFiOrWarn();
+        const data = await apiFetch(`/api/registry/${fiId}/phase1/review?accept=true`, {
+            method: 'POST',
+            body: JSON.stringify({ performedBy: document.getElementById('reviewer').value, comment: document.getElementById('reviewComment').value })
+        });
+        renderStatus(data, 'currentFi');
+        showMessage('reviewStatus', 'Phase 1 accepted.');
+    } catch (err) {
+        if (err.message === 'No FI') return;
+        showMessage('reviewStatus', 'Review failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+document.getElementById('declinePhase1').onclick = async () => {
+    try {
+        const fiId = getFiOrWarn();
+        const data = await apiFetch(`/api/registry/${fiId}/phase1/review?accept=false`, {
+            method: 'POST',
+            body: JSON.stringify({ performedBy: document.getElementById('reviewer').value, comment: document.getElementById('reviewComment').value })
+        });
+        renderStatus(data, 'currentFi');
+        showMessage('reviewStatus', 'Correction requested for phase 1.');
+    } catch (err) {
+        if (err.message === 'No FI') return;
+        showMessage('reviewStatus', 'Review failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+document.getElementById('approve').onclick = async () => {
+    try {
+        const fiId = getFiOrWarn();
+        const data = await apiFetch(`/api/registry/${fiId}/decision?approve=true`, {
+            method: 'POST',
+            body: JSON.stringify({ performedBy: document.getElementById('controller').value, comment: document.getElementById('decisionComment').value })
+        });
+        renderStatus(data, 'currentFi');
+        showMessage('reviewStatus', 'Approved.');
+    } catch (err) {
+        if (err.message === 'No FI') return;
+        showMessage('reviewStatus', 'Decision failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+document.getElementById('decline').onclick = async () => {
+    try {
+        const fiId = getFiOrWarn();
+        const data = await apiFetch(`/api/registry/${fiId}/decline`, {
+            method: 'POST',
+            body: JSON.stringify({ performedBy: document.getElementById('controller').value, comment: document.getElementById('decisionComment').value })
+        });
+        renderStatus(data, 'currentFi');
+        showMessage('reviewStatus', 'Declined.');
+    } catch (err) {
+        if (err.message === 'No FI') return;
+        showMessage('reviewStatus', 'Decline failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+function loadFi() {
+    const fiId = getFiId();
+    if (!fiId) {
+        showMessage('reviewStatus', 'No FI selected.', true);
+        return;
+    }
+    apiFetch(`/api/registry/${fiId}`)
+        .then(data => renderStatus(data, 'currentFi'))
+        .catch(err => showMessage('reviewStatus', 'Load failed: ' + JSON.stringify(err.data || err), true));
+}
+
+loadFi();
+</script>
+</body>
+</html>

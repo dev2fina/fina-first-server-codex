@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Entities</title>
+    <script src="/common.js"></script>
+</head>
+<body>
+<h1>Administrators, Beneficiaries, Branches</h1>
+<div><a href="/index.html">Back</a></div>
+<div id="currentFi"></div>
+
+<section>
+    <h2>Managers</h2>
+    <label>Full Name <input id="mgrName"></label>
+    <label>Personal Code <input id="mgrCode"></label>
+    <label>Position <input id="mgrPosition"></label>
+    <label>Email <input id="mgrEmail"></label>
+    <label>Phone <input id="mgrPhone"></label>
+    <label>Role
+        <select id="mgrRole">
+            <option value="CHIEF_EXECUTIVE">CHIEF_EXECUTIVE</option>
+            <option value="ADMINISTRATOR">ADMINISTRATOR</option>
+            <option value="AUTHORIZED_PERSON">AUTHORIZED_PERSON</option>
+        </select>
+    </label>
+    <button id="addManager">Add</button>
+    <ul id="managers"></ul>
+</section>
+
+<section>
+    <h2>Beneficiaries</h2>
+    <label>Name <input id="benName"></label>
+    <label>Country <input id="benCountry"></label>
+    <label>Ownership % <input id="benPct" type="number" value="0"></label>
+    <button id="addBeneficiary">Add</button>
+    <ul id="beneficiaries"></ul>
+</section>
+
+<section>
+    <h2>Branches</h2>
+    <label>Name <input id="branchName"></label>
+    <label>Address <input id="branchAddress"></label>
+    <label>City <input id="branchCity"></label>
+    <label>Country <input id="branchCountry"></label>
+    <label><input type="checkbox" id="branchHq"> Headquarters</label>
+    <button id="addBranch">Add</button>
+    <ul id="branches"></ul>
+</section>
+
+<section>
+    <button id="saveEntities">Save Entities</button>
+    <div id="entityStatus"></div>
+</section>
+
+<script>
+let managers = [];
+let beneficiaries = [];
+let branches = [];
+let latestFi;
+
+function renderList(items, elementId, formatter) {
+    const el = document.getElementById(elementId);
+    el.innerHTML = '';
+    items.forEach((item, idx) => {
+        const li = document.createElement('li');
+        li.textContent = formatter(item);
+        const btn = document.createElement('button');
+        btn.textContent = 'Remove';
+        btn.onclick = () => { items.splice(idx,1); renderAll(); };
+        li.appendChild(btn);
+        el.appendChild(li);
+    });
+}
+
+function renderAll() {
+    renderList(managers, 'managers', m => `${m.fullName} (${m.role})`);
+    renderList(beneficiaries, 'beneficiaries', b => `${b.name} - ${b.ownershipPercent}%`);
+    renderList(branches, 'branches', b => `${b.name} ${b.headquarters ? '(HQ)' : ''}`);
+}
+
+function loadFi() {
+    const fiId = getFiId();
+    if (!fiId) {
+        showMessage('entityStatus', 'No FI selected.', true);
+        return;
+    }
+    apiFetch(`/api/registry/${fiId}`)
+        .then(data => {
+            latestFi = data;
+            managers = data.managers || [];
+            beneficiaries = data.beneficiaries || [];
+            branches = data.branches || [];
+            renderStatus(data, 'currentFi');
+            renderAll();
+        })
+        .catch(err => showMessage('entityStatus', 'Load failed: ' + JSON.stringify(err.data || err), true));
+}
+
+document.getElementById('addManager').onclick = () => {
+    managers.push({
+        fullName: document.getElementById('mgrName').value,
+        personalCode: document.getElementById('mgrCode').value,
+        position: document.getElementById('mgrPosition').value,
+        email: document.getElementById('mgrEmail').value,
+        phone: document.getElementById('mgrPhone').value,
+        role: document.getElementById('mgrRole').value
+    });
+    renderAll();
+};
+
+document.getElementById('addBeneficiary').onclick = () => {
+    beneficiaries.push({
+        name: document.getElementById('benName').value,
+        country: document.getElementById('benCountry').value,
+        ownershipPercent: parseInt(document.getElementById('benPct').value || '0', 10)
+    });
+    renderAll();
+};
+
+document.getElementById('addBranch').onclick = () => {
+    branches.push({
+        name: document.getElementById('branchName').value,
+        address: document.getElementById('branchAddress').value,
+        city: document.getElementById('branchCity').value,
+        country: document.getElementById('branchCountry').value,
+        headquarters: document.getElementById('branchHq').checked
+    });
+    renderAll();
+};
+
+function buildPayload() {
+    if (!latestFi) return null;
+    return {
+        registryCode: latestFi.registryCode,
+        legalName: latestFi.legalName,
+        brandName: latestFi.brandName,
+        fiType: latestFi.fiType,
+        establishmentDate: latestFi.establishmentDate,
+        headquartersAddress: latestFi.headquartersAddress,
+        headquartersCity: latestFi.headquartersCity,
+        headquartersCountry: latestFi.headquartersCountry,
+        registrationCountry: latestFi.registrationCountry,
+        managers,
+        beneficiaries,
+        branches
+    };
+}
+
+document.getElementById('saveEntities').onclick = async () => {
+    const fiId = getFiId();
+    if (!fiId) {
+        showMessage('entityStatus', 'No FI selected.', true);
+        return;
+    }
+    const payload = buildPayload();
+    if (!payload) {
+        showMessage('entityStatus', 'Load FI first.', true);
+        return;
+    }
+    try {
+        const data = await apiFetch(`/api/registry/${fiId}`, { method: 'PUT', body: JSON.stringify(payload) });
+        latestFi = data;
+        renderStatus(data, 'currentFi');
+        showMessage('entityStatus', 'Entities saved.');
+    } catch (err) {
+        showMessage('entityStatus', 'Save failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+loadFi();
+</script>
+</body>
+</html>
