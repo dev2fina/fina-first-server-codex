@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Questionnaire</title>
+    <script src="/common.js"></script>
+</head>
+<body>
+<h1>Questionnaire</h1>
+<div><a href="/index.html">Back</a></div>
+<div id="currentFi"></div>
+
+<section>
+    <label>Question <input id="qText" size="80"></label>
+    <label>Category <input id="qCategory"></label>
+    <label>Obligatory <input type="checkbox" id="qObligatory"></label>
+    <label>Answer
+        <select id="qAnswer">
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+            <option value="NA">NA</option>
+        </select>
+    </label>
+    <button id="addQuestion">Add</button>
+    <ul id="questions"></ul>
+    <button id="submitQuestions">Submit Questionnaire</button>
+    <div id="qStatus"></div>
+</section>
+
+<script>
+let responses = [];
+
+function renderQuestions() {
+    const el = document.getElementById('questions');
+    el.innerHTML = '';
+    responses.forEach((q, idx) => {
+        const li = document.createElement('li');
+        li.textContent = `${q.question} [${q.answer}] ${q.obligatory ? '(required)' : ''}`;
+        const btn = document.createElement('button');
+        btn.textContent = 'Remove';
+        btn.onclick = () => { responses.splice(idx,1); renderQuestions(); };
+        li.appendChild(btn);
+        el.appendChild(li);
+    });
+}
+
+document.getElementById('addQuestion').onclick = () => {
+    responses.push({
+        question: document.getElementById('qText').value,
+        category: document.getElementById('qCategory').value,
+        obligatory: document.getElementById('qObligatory').checked,
+        answer: document.getElementById('qAnswer').value,
+        state: 'CURRENT'
+    });
+    renderQuestions();
+};
+
+document.getElementById('submitQuestions').onclick = async () => {
+    const fiId = getFiId();
+    if (!fiId) {
+        showMessage('qStatus', 'No FI selected.', true);
+        return;
+    }
+    try {
+        const data = await apiFetch(`/api/registry/${fiId}/questionnaire`, {
+            method: 'POST',
+            body: JSON.stringify({ responses })
+        });
+        renderStatus(data, 'currentFi');
+        showMessage('qStatus', 'Questionnaire saved.');
+    } catch (err) {
+        showMessage('qStatus', 'Submit failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+function loadFi() {
+    const fiId = getFiId();
+    if (!fiId) {
+        showMessage('qStatus', 'No FI selected.', true);
+        return;
+    }
+    apiFetch(`/api/registry/${fiId}`)
+        .then(data => {
+            renderStatus(data, 'currentFi');
+            responses = data.questionnaireResponses || [];
+            renderQuestions();
+        })
+        .catch(err => showMessage('qStatus', 'Load failed: ' + JSON.stringify(err.data || err), true));
+}
+
+loadFi();
+</script>
+</body>
+</html>

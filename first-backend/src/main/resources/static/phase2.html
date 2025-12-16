@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phase 2 & Licenses</title>
+    <script src="/common.js"></script>
+</head>
+<body>
+<h1>Phase 2 & License Info</h1>
+<div><a href="/index.html">Back</a></div>
+<div id="currentFi"></div>
+
+<section>
+    <button id="openPhase2">Open Phase 2</button>
+</section>
+
+<section>
+    <h2>Licenses (PSP/VASP)</h2>
+    <label>License Type
+        <select id="licenseType">
+            <option value="PSP">PSP</option>
+            <option value="VASP">VASP</option>
+        </select>
+    </label>
+    <label>License Number <input id="licenseNumber"></label>
+    <label>Status
+        <select id="licenseStatus">
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="INACTIVE">INACTIVE</option>
+            <option value="REVOKED">REVOKED</option>
+        </select>
+    </label>
+    <label>Issued Date <input id="issuedDate" type="date"></label>
+    <label>Expiry Date <input id="expiryDate" type="date"></label>
+    <button id="addLicense">Add License</button>
+    <ul id="licenses"></ul>
+    <button id="saveLicenses">Save Licenses</button>
+    <div id="licenseStatusMsg"></div>
+</section>
+
+<script>
+let licenses = [];
+
+function renderLicenses() {
+    const el = document.getElementById('licenses');
+    el.innerHTML = '';
+    licenses.forEach((l, idx) => {
+        const li = document.createElement('li');
+        li.textContent = `${l.licenseType} ${l.licenseNumber} (${l.licenseStatus})`;
+        const btn = document.createElement('button');
+        btn.textContent = 'Remove';
+        btn.onclick = () => { licenses.splice(idx,1); renderLicenses(); };
+        li.appendChild(btn);
+        el.appendChild(li);
+    });
+}
+
+function loadFi() {
+    const fiId = getFiId();
+    if (!fiId) {
+        showMessage('licenseStatusMsg', 'No FI selected.', true);
+        return;
+    }
+    apiFetch(`/api/registry/${fiId}`)
+        .then(data => {
+            renderStatus(data, 'currentFi');
+            licenses = data.licenses || [];
+            renderLicenses();
+        })
+        .catch(err => showMessage('licenseStatusMsg', 'Load failed: ' + JSON.stringify(err.data || err), true));
+}
+
+document.getElementById('addLicense').onclick = () => {
+    licenses.push({
+        licenseType: document.getElementById('licenseType').value,
+        licenseNumber: document.getElementById('licenseNumber').value,
+        licenseStatus: document.getElementById('licenseStatus').value,
+        issuedDate: document.getElementById('issuedDate').value || null,
+        expiryDate: document.getElementById('expiryDate').value || null
+    });
+    renderLicenses();
+};
+
+document.getElementById('saveLicenses').onclick = async () => {
+    const fiId = getFiId();
+    if (!fiId) {
+        showMessage('licenseStatusMsg', 'No FI selected.', true);
+        return;
+    }
+    try {
+        const data = await apiFetch(`/api/registry/${fiId}/licenses`, { method: 'POST', body: JSON.stringify(licenses) });
+        licenses = data.licenses || [];
+        renderLicenses();
+        renderStatus(data, 'currentFi');
+        showMessage('licenseStatusMsg', 'Licenses saved.');
+    } catch (err) {
+        showMessage('licenseStatusMsg', 'Save failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+document.getElementById('openPhase2').onclick = async () => {
+    const fiId = getFiId();
+    if (!fiId) {
+        showMessage('licenseStatusMsg', 'No FI selected.', true);
+        return;
+    }
+    try {
+        const data = await apiFetch(`/api/registry/${fiId}/phase2/open`, { method: 'POST' });
+        renderStatus(data, 'currentFi');
+        showMessage('licenseStatusMsg', 'Phase 2 opened.');
+    } catch (err) {
+        showMessage('licenseStatusMsg', 'Open failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+loadFi();
+</script>
+</body>
+</html>
