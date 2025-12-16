@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phase 1</title>
+    <script src="/common.js"></script>
+</head>
+<body>
+<h1>Phase 1 - Draft and Submit</h1>
+<div><a href="/index.html">Back</a></div>
+<div id="currentFi"></div>
+
+<section>
+    <h2>General Info</h2>
+    <label>Registry Code <input id="registryCode"></label>
+    <label>Legal Name <input id="legalName"></label>
+    <label>Brand Name <input id="brandName"></label>
+    <label>FI Type
+        <select id="fiType">
+            <option value="BANK">BANK</option>
+            <option value="PSP">PSP</option>
+            <option value="VASP">VASP</option>
+        </select>
+    </label>
+    <label>Establishment Date <input id="estDate" type="date"></label>
+    <label>HQ Address <input id="hqAddress"></label>
+    <label>HQ City <input id="hqCity"></label>
+    <label>HQ Country <input id="hqCountry"></label>
+    <label>Registration Country <input id="regCountry"></label>
+</section>
+
+<section>
+    <h2>Managers</h2>
+    <label>Full Name <input id="mgrName"></label>
+    <label>Personal Code <input id="mgrCode"></label>
+    <label>Position <input id="mgrPosition"></label>
+    <label>Email <input id="mgrEmail"></label>
+    <label>Phone <input id="mgrPhone"></label>
+    <label>Role
+        <select id="mgrRole">
+            <option value="CHIEF_EXECUTIVE">CHIEF_EXECUTIVE</option>
+            <option value="ADMINISTRATOR">ADMINISTRATOR</option>
+            <option value="AUTHORIZED_PERSON">AUTHORIZED_PERSON</option>
+        </select>
+    </label>
+    <button id="addManager">Add Manager</button>
+    <ul id="managers"></ul>
+</section>
+
+<section>
+    <h2>Beneficiaries</h2>
+    <label>Name <input id="benName"></label>
+    <label>Country <input id="benCountry"></label>
+    <label>Ownership % <input id="benPct" type="number" value="0"></label>
+    <button id="addBeneficiary">Add Beneficiary</button>
+    <ul id="beneficiaries"></ul>
+</section>
+
+<section>
+    <h2>Branches</h2>
+    <label>Name <input id="branchName"></label>
+    <label>Address <input id="branchAddress"></label>
+    <label>City <input id="branchCity"></label>
+    <label>Country <input id="branchCountry"></label>
+    <label><input type="checkbox" id="branchHq"> Headquarters</label>
+    <button id="addBranch">Add Branch</button>
+    <ul id="branches"></ul>
+</section>
+
+<section>
+    <button id="saveDraft">Save Draft</button>
+    <label>Submitted By <input id="submittedBy" value="admin"></label>
+    <button id="submitPhase1">Submit Phase 1</button>
+    <div id="saveStatus"></div>
+</section>
+
+<script>
+let managers = [];
+let beneficiaries = [];
+let branches = [];
+
+function renderList(items, elementId, formatter) {
+    const el = document.getElementById(elementId);
+    el.innerHTML = '';
+    items.forEach((item, idx) => {
+        const li = document.createElement('li');
+        li.textContent = formatter(item);
+        const btn = document.createElement('button');
+        btn.textContent = 'Remove';
+        btn.onclick = () => { items.splice(idx,1); renderAll(); };
+        li.appendChild(btn);
+        el.appendChild(li);
+    });
+}
+
+function renderAll() {
+    renderList(managers, 'managers', m => `${m.fullName} (${m.role})`);
+    renderList(beneficiaries, 'beneficiaries', b => `${b.name} - ${b.ownershipPercent}%`);
+    renderList(branches, 'branches', b => `${b.name} ${b.headquarters ? '(HQ)' : ''}`);
+}
+
+document.getElementById('addManager').onclick = () => {
+    managers.push({
+        fullName: document.getElementById('mgrName').value,
+        personalCode: document.getElementById('mgrCode').value,
+        position: document.getElementById('mgrPosition').value,
+        email: document.getElementById('mgrEmail').value,
+        phone: document.getElementById('mgrPhone').value,
+        role: document.getElementById('mgrRole').value
+    });
+    renderAll();
+};
+
+document.getElementById('addBeneficiary').onclick = () => {
+    beneficiaries.push({
+        name: document.getElementById('benName').value,
+        country: document.getElementById('benCountry').value,
+        ownershipPercent: parseInt(document.getElementById('benPct').value || '0', 10)
+    });
+    renderAll();
+};
+
+document.getElementById('addBranch').onclick = () => {
+    branches.push({
+        name: document.getElementById('branchName').value,
+        address: document.getElementById('branchAddress').value,
+        city: document.getElementById('branchCity').value,
+        country: document.getElementById('branchCountry').value,
+        headquarters: document.getElementById('branchHq').checked
+    });
+    renderAll();
+};
+
+function buildPayload() {
+    return {
+        registryCode: document.getElementById('registryCode').value,
+        legalName: document.getElementById('legalName').value,
+        brandName: document.getElementById('brandName').value,
+        fiType: document.getElementById('fiType').value,
+        establishmentDate: document.getElementById('estDate').value || null,
+        headquartersAddress: document.getElementById('hqAddress').value,
+        headquartersCity: document.getElementById('hqCity').value,
+        headquartersCountry: document.getElementById('hqCountry').value,
+        registrationCountry: document.getElementById('regCountry').value,
+        managers,
+        beneficiaries,
+        branches
+    };
+}
+
+async function loadFi() {
+    const fiId = getFiId();
+    if (!fiId) {
+        showMessage('saveStatus', 'No FI selected. Create one on index page.', true);
+        return;
+    }
+    try {
+        const data = await apiFetch(`/api/registry/${fiId}`);
+        document.getElementById('registryCode').value = data.registryCode || '';
+        document.getElementById('legalName').value = data.legalName || '';
+        document.getElementById('brandName').value = data.brandName || '';
+        document.getElementById('fiType').value = data.fiType || 'BANK';
+        document.getElementById('hqAddress').value = data.headquartersAddress || '';
+        document.getElementById('hqCity').value = data.headquartersCity || '';
+        document.getElementById('hqCountry').value = data.headquartersCountry || '';
+        document.getElementById('regCountry').value = data.registrationCountry || '';
+        managers = data.managers || [];
+        beneficiaries = data.beneficiaries || [];
+        branches = data.branches || [];
+        renderAll();
+        renderStatus(data, 'currentFi');
+    } catch (err) {
+        showMessage('saveStatus', 'Load failed: ' + JSON.stringify(err.data || err), true);
+    }
+}
+
+document.getElementById('saveDraft').onclick = async () => {
+    const fiId = getFiId();
+    if (!fiId) {
+        showMessage('saveStatus', 'No FI selected.', true);
+        return;
+    }
+    try {
+        const data = await apiFetch(`/api/registry/${fiId}`, { method: 'PUT', body: JSON.stringify(buildPayload()) });
+        renderStatus(data, 'currentFi');
+        showMessage('saveStatus', 'Saved.');
+    } catch (err) {
+        showMessage('saveStatus', 'Save failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+document.getElementById('submitPhase1').onclick = async () => {
+    const fiId = getFiId();
+    if (!fiId) {
+        showMessage('saveStatus', 'No FI selected.', true);
+        return;
+    }
+    try {
+        const data = await apiFetch(`/api/registry/${fiId}/submit-phase1`, {
+            method: 'POST',
+            body: JSON.stringify({ submittedBy: document.getElementById('submittedBy').value })
+        });
+        renderStatus(data, 'currentFi');
+        showMessage('saveStatus', 'Submitted for controller review.');
+    } catch (err) {
+        showMessage('saveStatus', 'Submit failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+loadFi();
+</script>
+</body>
+</html>

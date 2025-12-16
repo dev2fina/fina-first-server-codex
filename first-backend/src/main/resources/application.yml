@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: first-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/first
+    username: first
+    password: change-me
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+security:
+  jwt:
+    secret: change-me
+    expiration-ms: 3600000
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO

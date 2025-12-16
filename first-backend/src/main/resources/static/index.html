@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FI Registration Demo</title>
+    <script src="/common.js"></script>
+</head>
+<body>
+<h1>FI Registration Workflow Demo</h1>
+<p>This minimal UI walks through Phase 1/2, questionnaires, controller review, and final registration.</p>
+
+<section>
+    <h2>Authenticate</h2>
+    <p>Default demo user: <strong>admin / password</strong></p>
+    <label>Username <input id="username" value="admin"></label>
+    <label>Password <input id="password" type="password" value="password"></label>
+    <button id="loginBtn">Login</button>
+    <div id="loginStatus"></div>
+</section>
+
+<section>
+    <h2>Create FI (Phase 1 draft)</h2>
+    <label>Registry Code <input id="registryCode" value="FI-001"></label>
+    <label>Legal Name <input id="legalName" value="Demo FI"></label>
+    <label>FI Type
+        <select id="fiType">
+            <option value="BANK">BANK</option>
+            <option value="PSP">PSP</option>
+            <option value="VASP">VASP</option>
+        </select>
+    </label>
+    <label>Headquarters Address <input id="hqAddress" value="Main street 1"></label>
+    <h3>Chief Executive (required)</h3>
+    <label>Full Name <input id="managerName" value="Alice Example"></label>
+    <label>Personal Code <input id="managerCode" value="123456"></label>
+    <label>Email <input id="managerEmail" value="alice@example.com"></label>
+    <label>Phone <input id="managerPhone" value="+995000"></label>
+    <button id="createBtn">Create Draft</button>
+    <div id="createStatus"></div>
+</section>
+
+<section>
+    <h2>Current FI</h2>
+    <div id="currentFi">No FI selected.</div>
+    <p>
+        <a class="fi-link" href="/phase1.html">Phase 1</a> |
+        <a class="fi-link" href="/entities.html">Entities</a> |
+        <a class="fi-link" href="/phase2.html">Phase 2 & Licenses</a> |
+        <a class="fi-link" href="/questionnaire.html">Questionnaire</a> |
+        <a class="fi-link" href="/review.html">Review</a>
+    </p>
+</section>
+
+<script>
+document.getElementById('loginBtn').onclick = async () => {
+    try {
+        const data = await apiFetch('/api/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ username: document.getElementById('username').value, password: document.getElementById('password').value })
+        });
+        setToken(data.token);
+        showMessage('loginStatus', 'Authenticated');
+    } catch (err) {
+        showMessage('loginStatus', 'Login failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+document.getElementById('createBtn').onclick = async () => {
+    try {
+        const payload = {
+            registryCode: document.getElementById('registryCode').value,
+            legalName: document.getElementById('legalName').value,
+            fiType: document.getElementById('fiType').value,
+            headquartersAddress: document.getElementById('hqAddress').value,
+            managers: [{
+                fullName: document.getElementById('managerName').value,
+                personalCode: document.getElementById('managerCode').value,
+                email: document.getElementById('managerEmail').value,
+                phone: document.getElementById('managerPhone').value,
+                role: 'CHIEF_EXECUTIVE'
+            }]
+        };
+        const data = await apiFetch('/api/registry', { method: 'POST', body: JSON.stringify(payload) });
+        setFiId(data.id);
+        renderStatus(data, 'createStatus');
+        populateFiLink(data.id);
+        showMessage('currentFi', 'FI created with ID ' + data.id);
+    } catch (err) {
+        showMessage('createStatus', 'Create failed: ' + JSON.stringify(err.data || err), true);
+    }
+};
+
+loadExistingFi();
+</script>
+</body>
+</html>
